@@ -8,6 +8,8 @@ const session = require('express-session');
 const indexRouter = require('./routes/index');
 // Handles User api requests
 const usersRouter = require('./routes/users');
+// Handles User api requests
+const requestsRouter = require('./routes/requests');
 
 const app = express();
 app.use(session({ secret: "6170", resave: true, saveUninitialized: true }));
@@ -19,5 +21,7 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/requests', requestsRouter);
+
 
 module.exports = app;
