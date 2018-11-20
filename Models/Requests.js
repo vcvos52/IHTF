@@ -21,7 +21,7 @@ class Requests {
     });
     locations.forEach(async function(location) {
       const diningHallId = await Requests.getDiningId(location);
-      const insertLocation = `insert into \`location\` (\`request_id\`, \`dining_hall_id\`), values (${requestID}, ${diningHallId});`;
+      const insertLocation = `INSERT INTO \`location\` (\`request_id\`, \`dining_hall_id\`), values (${requestID}, ${diningHallId});`;
       await database.query(insertLocation);
     });
     return await Requests.match(requestID);
@@ -60,7 +60,7 @@ class Requests {
     const intervalsReq = await database.query(`select * from \`interval\` where request_id=${requestId};`);
     const locationsReq = await database.query(`select * from location where request_id=${requestId};`);
 
-    const allIntervals = await database.query(`select * from interval where not(request_id=${requestId});`);
+    const allIntervals = await database.query(`select * from interval where request_id!=${requestId};`);
 
     let chosenDate = "";
     let chosenLocationId = -1;
@@ -72,7 +72,7 @@ class Requests {
         const intervalStartTime = new Date(interval.start_time);
         const intervalEndTime = new Date(interval.end_time);
         const intervalReqId = interval.request_id;
-        const sqlType = `select * from request where request_id=${intervalReqId} and not(type=${type});`;
+        const sqlType = `select * from request where request_id=${intervalReqId} and type!=${type};`;
         const responseType = await database.query(sqlType);
         const sqlLocationsFromSelected = `select * from location where request_id=${intervalReqId};`;
         const locationsFromSelected = await database.query(sqlLocationsFromSelected);
