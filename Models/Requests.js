@@ -5,7 +5,7 @@ const Users = require('./Users');
 class Requests {
   static async addRequest(type, kerberos, locations, date, intervals) {
     // TODO: check if there is outstanding request by same user at same time
-    const userId = Users.getId(kerberos);
+    const userId = await Users.getId(kerberos);
     const insert = `insert into request (user_id, type) values (${userId}, '${type}');`;
     const response = await database.query(insert);
     const sqlGetRequestID = `select id from request where user_id=${userId} and type='${type}';`;
@@ -76,7 +76,7 @@ class Requests {
         if (reqStartTime <= intervalEndTime && reqStartTime >= intervalStartTime && responseType!=undefined) {
           chosenDate = reqStartTime;
           locationsReq.forEach(async function(locationReq) {
-            sqlLocationsFromSelected.forEach(async function(locationSelect) {
+            locationsFromSelected.forEach(async function(locationSelect) {
               if (locationReq.dining_hall_id == locationSelect.dining_hall_id) {
                 chosenLocationId = locationReq.dining_hall_id;
               }
@@ -86,7 +86,7 @@ class Requests {
         else if (reqEndTime <= intervalEndTime && reqEndTime >= intervalStartTime && responseType!=undefined) {
           chosenDate = reqEndTime;
           locationsReq.forEach(async function(locationReq) {
-            sqlLocationsFromSelected.forEach(async function(locationSelect) {
+            locationsFromSelected.forEach(async function(locationSelect) {
               if (locationReq.dining_hall_id == locationSelect.dining_hall_id) {
                 chosenLocationId = locationReq.dining_hall_id;
               }
