@@ -7,7 +7,7 @@ class Users {
   * @return {boolean} true if kerberos exists in user table, false if not
   */
   static async userExists(kerberos) {
-    const sql = `select * from user where kerberos='${kerberos}'`
+    const sql = `select * from user where kerberos='${kerberos}';`;
     const response = await database.query(sql);
     if (response[0]!==undefined) {
       return true;
@@ -21,7 +21,7 @@ class Users {
    * @return {int} value of id or false if kerberos does not exist in user table
    */
   static async getId(kerberos) {
-    const sql = `select * from user where kerberos='${kerberos}'`
+    const sql = `select * from user where kerberos='${kerberos}';`;
     const response = await database.query(sql);
     if (response[0]!==undefined) {
       return response[0].id;
