@@ -1,4 +1,3 @@
-
 let session = require("express-session");
 
 const express = require('express');
@@ -20,14 +19,14 @@ const Users = require('../Models/Users.js')
  * @throws {403} - if the username is from MIT
 */
 router.post('/:user', async (req, res) => {
-    let kerberos = req.param.user;
+    let kerberos = req.params.user;
     // if the kerberos does not exist, return that
     if (!(await Users.userExists(kerberos))){
         res.status(403).json("This is not a valid user.").end();
         return;
     }
     req.session.name = kerberos;
-    res.status(201).json(newUser).end();
+    res.status(201).json(kerberos).end();
 
 });
 
@@ -38,9 +37,10 @@ router.post('/:user', async (req, res) => {
  * @param {String} - users name
  * @returns {List<Matches>} List of matches for a specific user
  * @throws {404} - No matches found
+ * @throws {403} - user is not logged in
 */
 router.get('/matches/:user', async (req, res) => {
-    let kerberos = req.param.user;
+    let kerberos = req.params.user;
     // if the kerberos does not exist, return that
     if (!(await Users.userExists(kerberos))){
         res.status(403).json("This is not a valid user.").end();
@@ -51,7 +51,12 @@ router.get('/matches/:user', async (req, res) => {
         res.status(404).json("This user is not matched.").end();
         return;
     }
-    let matchData = shapeDate(matches, req);
+    if (req.session.name !== kerberos){
+        res.status(403).json("You do not have permission to edit this freet.").end();
+        return;
+    }
+    let matchData = await shapeDate(matches, req);
+    console.log(matchData);
     res.status(201).json(matchData).end();
 
 });
@@ -59,25 +64,27 @@ router.get('/matches/:user', async (req, res) => {
 
 /**
  * Takes in the data, and reformats it to be more readable in the view
- * @param matches {List<JSON>} - [{ID: , Guest: , Host: , Time: , Location: }, ...]
- * @returns {List<JSON>} - [{role: , otherPerson: , Time: , Location: }, ...]
+ * @param matches {List<JSON>} - [{id{Integer}: , time{datetime}: , host_id{Integer}: , guest_id{Integer}: , dining_hall_id{Integer}: }, ...]
+ * @returns {List<JSON>} - [{role{String}: , otherPerson{String}: , time{Integer}: , dining_hall_id{datetime}: }, ...]
  */
-function shapeDate(matches, req){
+async function shapeDate(matches, req){
+    let data = []
     for (let i = 0; i < matches.length; i++){
         let row = matches[i];
         let newRow = {};
         // need to make sure the column names are correct
-        if (row["Guest"] === req.session.name){
+        if (row["guest_id"] === await Users.getId(req.session.name)){
             newRow["role"] = "guest";
-            newRow["otherPerson"] = row["Host"];
-        } else if (row["Host"] === req.session.name){
+            newRow["otherPersonName"] = await Users.getKerberos(row["host_id"]);
+        } else if (row["host_id"] === await Users.getId(req.session.name)){
             newRow["role"] = "host";
-            newRow["otherPerson"] = row["Guest"];
+            newRow["otherPerson"] = await Users.getKerberos(row["guest_id"]);
         }
-        newRow["Time"] = row["Time"];
-        newRow["Location"] = row["Location"];
-        return newRow;
+        newRow["time"] = row["time"];
+        newRow["dining_hall_id"] = row["dining_hall_id"];
+        data.push(newRow);
     }
+    return data;
 }
 
 

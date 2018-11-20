@@ -1,15 +1,15 @@
-const mysql = require('mysal');
+const mysql = require('mysql');
 
 const config = {
   host: 'sql.mit.edu',
   user: 'capolino',
   password: 'fixsoftware',
-  databse: 'capolino+ihtf'
+  database: 'capolino+ihtf'
 };
 
 class Database {
   constructor(dbConfig) {
-    this.connection = mysql.createConnection(dbConfig);
+    this.connection = mysql.createPool(dbConfig);
   }
 
   query(sql) {
