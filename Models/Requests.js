@@ -5,7 +5,6 @@ const Users = require('./Users');
 class Requests {
   static async addRequest(type, kerberos, locations, date, intervals) {
     // TODO: check if there is outstanding request by same user at same time
-
     const userId = await Users.getId(kerberos);
     const insert = `insert into request (user_id, type) values (${userId}, '${type}');`;
     const response = await database.query(insert);
@@ -21,11 +20,19 @@ class Requests {
     });
     locations.forEach(async function(location) {
 
+<<<<<<< HEAD
       const diningHallId = await Requests.getDiningId(location);
       const insertLocation = `insert into location (request_id, dining_hall_id), values (${requestID}, ${diningHallId});`;
       await database.query(insertLocation);
     });
     return await Requests.match(requestID);
+=======
+      const diningHallId = await getDiningId(location);
+      const insertLocation = `insert into location (request_id, dining_hall_id), values (${requestId}, ${diningHallId});`;
+      await database.query(insertLocation);
+    });
+    return await match(requestId);
+>>>>>>> origin/models
   }
 
   static async requestExists(kerberos, type) {
@@ -125,4 +132,3 @@ class Requests {
 }
 
 module.exports = Requests;
-
