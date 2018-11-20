@@ -11,7 +11,7 @@
                   Give someone a meal you don't need!
                 </p>
                 <b-form @submit.prevent="chooseDonate">
-                    <b-button variant="primary" type="submit">Donate</b-button>
+                    <b-button type="submit" class="button">Donate</b-button>
                 </b-form>
             </b-card>
         </b-col>
@@ -26,7 +26,7 @@
                   Give someone a meal you don't need!
                 </p>
                 <b-form @submit.prevent="chooseReceive">
-                    <b-button variant="primary" type="submit">Receive</b-button>
+                    <b-button type="submit" class="button">Receive</b-button>
                 </b-form>
             </b-card>
         </b-col>
@@ -40,25 +40,22 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 
 export default {
+  name: "Choice",
 
-  name: 'Choice',
-
-  data () {
-    return {
-
-    }
+  data() {
+    return {};
   },
 
   methods: {
-    chooseDonate () {
-        eventBus.$emit("update-action", "donate");
+    chooseDonate() {
+      eventBus.$emit("update-action", "donate");
     },
 
-    chooseReceive () {
-        eventBus.$emit("update-action", "receive");
+    chooseReceive() {
+      eventBus.$emit("update-action", "receive");
     }
   }
-}
+};
 </script>
 
 <style lang="css" scoped>

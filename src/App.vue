@@ -2,7 +2,7 @@
   <b-container fluid id="app">
     <b-row :no-gutters="true" id="nav">
       <b-col lg="12"> 
-      <h2>
+      <h2 @click='goHome' id="home-button">
           Welcome to Have This Food!
       </h2>
       </b-col>
@@ -63,7 +63,7 @@ export default {
   data() {
     return {
       currentAction: "choice",
-      logged: false
+      logged: true
     };
   },
 
@@ -80,6 +80,12 @@ export default {
     eventBus.$on("logout-action", () => {
       this.logged = false;
     });
+  },
+
+  methods: {
+    goHome: function() {
+      eventBus.$emit("update-action", "choice");
+    }
   }
 };
 </script>
@@ -121,6 +127,11 @@ export default {
   background-color: #f1b101;
 }
 
+#home-button:hover {
+  background-color: #ffbb00;
+  cursor: pointer;
+}
+
 input {
   outline: 0;
   margin-left: 10px;
@@ -141,6 +152,11 @@ input {
 .not-logged {
   font-family: "EB Garamond", serif;
   padding-top: 40px;
+}
+
+#left {
+  padding-left: 50px;
+  padding-right: 50px;
 }
 
 .preset {

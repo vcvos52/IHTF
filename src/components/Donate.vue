@@ -11,14 +11,14 @@
                 <b-form-select multiple :select-size="4" v-model="hours" :options="hourOptions" class="multi-select"/>
                 <b-button type="submit" class="button">Submit</b-button>
             </b-form>
+            <div v-if='success' class="success-message">
+                {{ success }}
+            </div>
+            <div v-if='error' class="error-message">
+                <b> {{error}} </b>
+            </div>
         </b-col>
         <b-col></b-col>
-        <div v-if='success' class="success-message">
-            {{ success }}
-        </div>
-        <div v-if='error' class="error-message">
-            <b> {{error}} </b>
-        </div>
     </b-row>
 </template>
 
@@ -49,12 +49,12 @@ export default {
       ],
 
       hourOptions: [
-        { value: "(17:00, 17:30)", text: "5.00pm - 5.30pm" },
-        { value: "(17:31, 18:00)", text: "5.31pm - 6.00pm" },
-        { value: "(18:01, 18:30)", text: "6.01pm - 6.30pm" },
-        { value: "(18:31, 19:00)", text: "6.31pm - 7.00pm" },
-        { value: "(19:01, 19:30)", text: "7.01pm - 7.30pm" },
-        { value: "(19:31, 20:00)", text: "7.31pm - 8.00pm" }
+        { value: ["17:00", "17:30"], text: "5.00pm - 5.30pm" },
+        { value: ["17:31", "18:00"], text: "5.31pm - 6.00pm" },
+        { value: ["18:01", "18:30"], text: "6.01pm - 6.30pm" },
+        { value: ["18:31", "19:00"], text: "6.31pm - 7.00pm" },
+        { value: ["19:01", "19:30"], text: "7.01pm - 7.30pm" },
+        { value: ["19:31", "20:00"], text: "7.31pm - 8.00pm" }
       ]
     };
   },
