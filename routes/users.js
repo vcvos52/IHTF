@@ -39,8 +39,8 @@ router.post('/:user', async (req, res) => {
  * @throws {404} - No matches found
  * @throws {403} - user is not logged in
 */
-router.get('/matches/:user', async (req, res) => {
-    let kerberos = req.params.user;
+router.get('/matches', async (req, res) => {
+    let kerberos = req.session.name;
     // if the kerberos does not exist, return that
     if (!(await Users.userExists(kerberos))){
         res.status(403).json("This is not a valid user.").end();
@@ -56,7 +56,6 @@ router.get('/matches/:user', async (req, res) => {
         return;
     }
     let matchData = await shapeDate(matches, req);
-    console.log(matchData);
     res.status(201).json(matchData).end();
 
 });
@@ -65,7 +64,7 @@ router.get('/matches/:user', async (req, res) => {
 /**
  * Takes in the data, and reformats it to be more readable in the view
  * @param matches {List<JSON>} - [{id{Integer}: , time{datetime}: , host_id{Integer}: , guest_id{Integer}: , dining_hall_id{Integer}: }, ...]
- * @returns {List<JSON>} - [{role{String}: , otherPerson{String}: , time{Integer}: , dining_hall_id{datetime}: }, ...]
+ * @returns {List<JSON>} - [{role{String}: , otherPerson{String}: , diningHall{String}: , time{datetime}: }, ...]
  */
 async function shapeDate(matches, req){
     let data = []
@@ -81,7 +80,7 @@ async function shapeDate(matches, req){
             newRow["otherPerson"] = await Users.getKerberos(row["guest_id"]);
         }
         newRow["time"] = row["time"];
-        newRow["dining_hall_id"] = row["dining_hall_id"];
+        newRow["diningHall"] = Request.getDiningName(row["dining_hall_id"]);
         data.push(newRow);
     }
     return data;

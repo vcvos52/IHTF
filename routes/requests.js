@@ -21,7 +21,8 @@ router.post('/donate', async (req, res) => {
     let diningHalls = req.body.diningHalls;
     let intervals = req.body.hours;
     let date = req.body.date;
-    await Requests.addRequest("host", kerberos, diningHalls, intervals, date);
+    await Requests.addRequest("host", kerberos, diningHalls, date, intervals);
+    res.status(201).json("Donation request added").end();
 
 });
 
@@ -34,8 +35,12 @@ router.post('/donate', async (req, res) => {
  * @returns {Request} - the request created
 */
 router.post('/receive', async (req, res) => {
-    let user = req.param.user;
-
+    let kerberos = req.session.name;
+    let diningHalls = req.body.diningHalls;
+    let intervals = req.body.hours;
+    let date = req.body.date;
+    await Requests.addRequest("guest", kerberos, diningHalls, date, intervals);
+    res.status(201).json("Reception request added").end();
 });
 
 

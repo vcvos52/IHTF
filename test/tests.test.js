@@ -24,13 +24,13 @@ describe('Test /users', () => {
     
 
     test('GET get matches for a user', async () => {
-        
+        let matches;
         let user = "BigDickDaniel";
         await signin(user);
-        let matches = await getMatches(user);
-        // console.log(matches)
-
-        expect(1).toBe(1);
+        await getMatches(user).then(response => {
+            matches = response.data;
+        });
+        expect(matches).toBe([{"role":"host","otherPerson":"DannysSugarBaby","time":"2018-11-19T05:00:00.000Z","dining_hall_id":1}]);
     });    
 
   });
