@@ -1,12 +1,12 @@
 <template>
-    <b-row>
+    <b-row id="choice">
         <b-col>
             <b-card title="Donate a Meal!"
-                      img-src="https://picsum.photos/600/300/?image=25"
+                      :img-src="require('../assets/donate.png')"
                       img-alt="Image"
                       img-top
                       tag="article"
-                      class="mb-2">
+                      class="card">
                 <p class="card-text">
                   Give someone a meal you don't need!
                 </p>
@@ -17,11 +17,11 @@
         </b-col>
         <b-col>
             <b-card title="Receive a Meal!"
-                      img-src="https://picsum.photos/600/300/?image=25"
+                      :img-src="require('../assets/receive.jpg')"
                       img-alt="Image"
                       img-top
                       tag="article"
-                      class="mb-2">
+                      class="card">
                 <p class="card-text">
                   Give someone a meal you don't need!
                 </p>
@@ -58,5 +58,8 @@ export default {
 };
 </script>
 
-<style lang="css" scoped>
+<style scoped>
+#choice {
+  text-align: center;
+}
 </style>

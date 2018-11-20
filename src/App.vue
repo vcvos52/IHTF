@@ -179,4 +179,8 @@ p {
 option {
   background-color: white;
 }
+
+.card {
+  border-color: black;
+}
 </style>
