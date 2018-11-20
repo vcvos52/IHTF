@@ -21,7 +21,7 @@ class Requests {
     });
     locations.forEach(async function(location) {
       const diningHallId = await Requests.getDiningId(location);
-      const insertLocation = `insert into location (request_id, dining_hall_id), values (${requestID}, ${diningHallId});`;
+      const insertLocation = `insert into \`location\` (\`request_id\`, \`dining_hall_id\`), values (${requestID}, ${diningHallId});`;
       await database.query(insertLocation);
     });
     return await Requests.match(requestID);
@@ -57,10 +57,10 @@ class Requests {
     const response = await database.query(requestQuery);
     const user = response[0].user_id;
     const type = response[0].type;
-    const intervalsReq = `select * from interval where request_id=${requestId};`;
-    const locationsReq = `select * from location where request_id=${requestId};`;
+    const intervalsReq = await database.query(`select * from \`interval\` where request_id=${requestId};`);
+    const locationsReq = await database.query(`select * from location where request_id=${requestId};`);
 
-    const allIntervals = `select * from interval where not(request_id=${requestId});`;
+    const allIntervals = await database.query(`select * from interval where not(request_id=${requestId});`);
 
     let chosenDate = "";
     let chosenLocationId = -1;
@@ -83,8 +83,8 @@ class Requests {
               if (locationReq.dining_hall_id == locationSelect.dining_hall_id) {
                 chosenLocationId = locationReq.dining_hall_id;
               }
-            })
-          })
+            });
+          });
         }
         else if (reqEndTime <= intervalEndTime && reqEndTime >= intervalStartTime && responseType!=undefined) {
           chosenDate = reqEndTime;
@@ -93,8 +93,8 @@ class Requests {
               if (locationReq.dining_hall_id == locationSelect.dining_hall_id) {
                 chosenLocationId = locationReq.dining_hall_id;
               }
-            })
-          })
+            });
+          });
         }
         else {
           // no overlap for interval
@@ -113,7 +113,7 @@ class Requests {
         hostId = intervalReqId;
         guestId = requestId;
       }
-      const mealSql = `insert into meal (time, host_id, guest_id, dining_hall_id) values(${chosenDate}, ${hostId}, ${guestId}, ${chosenLocationId});`;
+      const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values(${chosenDate}, ${hostId}, ${guestId}, ${chosenLocationId});`;
       await database.query(mealSql);
       return true;
     }
