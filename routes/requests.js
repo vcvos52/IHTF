@@ -7,6 +7,8 @@ const router = express.Router();
 
 const axios = require('axios');
 
+const Requests = require('../Models/Requests.js');
+
 /**
  * Donate
  * Creates a donate request for a user

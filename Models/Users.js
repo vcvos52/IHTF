@@ -7,7 +7,11 @@ class Users {
   * @return {boolean} true if kerberos exists in user table, false if not
   */
   static async userExists(kerberos) {
+<<<<<<< HEAD
     const sql = `select * from user where kerberos ='${kerberos}'`
+=======
+    const sql = `select * from user where kerberos='${kerberos}'`
+>>>>>>> origin/routes
     const response = await database.query(sql);
     if (response[0]!==undefined) {
       return true;
@@ -21,7 +25,11 @@ class Users {
    * @return {int} value of id or false if kerberos does not exist in user table
    */
   static async getId(kerberos) {
+<<<<<<< HEAD
     const sql = `select * from user where kerberos ='${kerberos}'`
+=======
+    const sql = `select * from user where kerberos='${kerberos}'`
+>>>>>>> origin/routes
     const response = await database.query(sql);
     if (response[0]!==undefined) {
       return response[0].id;
@@ -49,7 +57,7 @@ class Users {
    * @return {object}  entries of matches or false if kerberos does not exist in user table or no matches for kerberos
    */
   static async getMatches(kerberos) {
-    const id = getId(kerberos);
+    const id = await Users.getId(kerberos);
     if (id) {
       const sql = `select * from meal where host_id=${id} or guest_id=${id}`
       const response = await database.query(sql);
