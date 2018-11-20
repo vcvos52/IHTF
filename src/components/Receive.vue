@@ -70,10 +70,11 @@ export default {
         hours: this.hours
       };
       axios
-        .post("/api/request/receive/", bodyContent)
-        .then(() => {
+        .post("/api/requests/receive/", bodyContent)
+        .then(res => {
           this.success = "Receive request made";
           eventBus.$emit("update-action", "choice");
+          alert(res.data);
         })
         .catch(err => {
           this.error = err.response.data.error;

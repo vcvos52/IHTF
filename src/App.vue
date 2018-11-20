@@ -67,14 +67,14 @@ export default {
     Meals,
     Choice,
     Donate,
-    Receive,
-    error: ""
+    Receive
   },
 
   data() {
     return {
       currentAction: "choice",
-      logged: false
+      logged: false,
+      error: ""
     };
   },
 
@@ -100,12 +100,12 @@ export default {
     logout: function() {
       this.error = "";
       axios
-        .post("/api/users/logout")
+        .put("/api/users/logout")
         .then(() => {
           this.logged = false;
         })
         .catch(err => {
-          this.error = err.response.data.error;
+          this.error = err.response.data;
         });
     }
   }
