@@ -82,7 +82,7 @@ router.get('/matches', async (req, res) => {
  * @returns {List<JSON>} - [{role{String}: , otherPerson{String}: , diningHall{String}: , time{datetime}: }, ...]
  */
 async function shapeDate(matches, req){
-    let data = []
+    let data = [];
     for (let i = 0; i < matches.length; i++){
         let row = matches[i];
         let newRow = {};
