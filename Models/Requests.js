@@ -10,29 +10,21 @@ class Requests {
     const response = await database.query(insert);
     const sqlGetRequestID = `select id from request where user_id=${userId} and type='${type}';`;
     const s = await database.query(sqlGetRequestID);
-    const requestID = s[0].id;
+    const requestID = s[s.length-1].id;
     intervals.forEach(async function(interval) {
       const startTime = date+ " " + interval[0]+":00";
       const endTime = date + " " + interval[1]+":00";
       console.log("HHHHHHHHHH", endTime);
-      const insertInterval = `insert into interval (request_id, start_time, end_time) values ('${requestID}', '${startTime}', '${endTime}');`;
+      console.log("REQUEST ID", requestID);
+      const insertInterval = `INSERT INTO \`interval\` (\`request_id\`, \`start_time\`, \`end_time\`) VALUES (${requestID}, '${startTime}', '${endTime}');`;
       await database.query(insertInterval);
     });
     locations.forEach(async function(location) {
-
-<<<<<<< HEAD
-      const diningHallId = await getDiningId(location);
-      const insertLocation = `insert into location (request_id, dining_hall_id), values (${requestId}, ${diningHallId});`;
-      await database.query(insertLocation);
-    });
-    return await match(requestId);
-=======
       const diningHallId = await Requests.getDiningId(location);
       const insertLocation = `insert into location (request_id, dining_hall_id), values (${requestID}, ${diningHallId});`;
       await database.query(insertLocation);
     });
     return await Requests.match(requestID);
->>>>>>> origin/routes
   }
 
   static async requestExists(kerberos, type) {
