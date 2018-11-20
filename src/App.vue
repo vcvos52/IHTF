@@ -28,7 +28,7 @@
         <Meals></Meals>
       </b-col> 
     </b-row>
-    <b-row>
+    <b-row v-if="logged === true">
       <b-col/>
       <b-col lg="1">
         <button class="button" id="signout" @click="logout">Log Out</button>
@@ -74,7 +74,7 @@ export default {
   data() {
     return {
       currentAction: "choice",
-      logged: true
+      logged: false
     };
   },
 
