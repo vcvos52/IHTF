@@ -28,7 +28,16 @@
         <Meals></Meals>
       </b-col> 
     </b-row>
-
+    <b-row>
+      <b-col/>
+      <b-col lg="1">
+        <button class="button" id="signout" @click="logout">Log Out</button>
+        <div v-if='error' class="error-message">
+            <b> {{error}} </b>
+        </div>
+      </b-col>
+      <b-col/>
+    </b-row>
     <b-row>
       <b-col id="copyrights">
         Made by Surf the High C's
@@ -39,6 +48,7 @@
 
 
 <script>
+import axios from "axios";
 import { eventBus } from "./main";
 import Login from "./components/Login";
 import Meals from "./components/Meals";
@@ -57,7 +67,8 @@ export default {
     Meals,
     Choice,
     Donate,
-    Receive
+    Receive,
+    error: ""
   },
 
   data() {
@@ -83,7 +94,19 @@ export default {
 
   methods: {
     goHome: function() {
-      eventBus.$emit("update-action", "choice");
+      this.currentAction = "choice";
+    },
+
+    logout: function() {
+      this.error = "";
+      axios
+        .post("/api/users/logout")
+        .then(() => {
+          this.logged = false;
+        })
+        .catch(err => {
+          this.error = err.response.data.error;
+        });
     }
   }
 };
@@ -135,6 +158,16 @@ input {
   outline: 0;
   margin-left: 10px;
   background-color: white;
+}
+
+#signout {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+#signout:hover {
+  cursor: pointer;
+  background-color: #ffbb00;
 }
 
 .success-message {
