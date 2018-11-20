@@ -4,10 +4,21 @@
       <h2> Welcome to Have This Food!</h2>
     </div>
     <div v-if="logged === false">
-           <Login/>
+      <Login/>
     </div>
-    <div v-else-if="logged === true">
-           
+    <div v-else-if="logged === true" class="logged">
+      <div v-if="currentAction === 'choice'">
+        <Choice></Choice>
+      </div>
+      <div v-else-if="currentAction === 'donate'">
+        <Donate></Donate>
+      </div>
+      <div v-else-if="currentAction === 'receive'">
+        <Receive></Receive>
+      </div>
+
+      <Meals></Meals>
+
     </div>
     <div id="copyrights">
       Made by Surf the High C's
@@ -19,19 +30,20 @@
 <script>
 import { eventBus } from "./main";
 import Login from "./components/Login";
+import Meals from "./components/Meals";
+import Choice from "./components/Choice";
+import Donate from "./components/Donate";
+import Receive from "./components/Receive";
+
 export default {
   name: "app",
 
-  props: {
-    logged: Boolean
-  },
-
   components: {
-    Login
-    // Meals,
-    // Choice,
-    // Donate,
-    // Receive
+    Login,
+    Meals,
+    Choice,
+    Donate,
+    Receive
   },
 
   data() {
@@ -97,5 +109,10 @@ input {
   outline: 0;
   margin-left: 10px;
   background-color: white;
+}
+
+.error-message {
+  padding: 30px;
+  color: red;
 }
 </style>

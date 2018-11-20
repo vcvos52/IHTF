@@ -5,7 +5,7 @@
             
             <div class="short-answer">
                 <label for="kerberos"> Kerberos: </label>
-                <input id="kerberos" v-model="kerboras" type="text" name="kerberos">
+                <input id="kerberos" v-model="kerberos" type="text" name="kerberos">
             </div>
             
             <input type="submit" value="Login" class="button">
@@ -20,7 +20,32 @@
 
 <script>
 import { eventBus } from "../main";
-export default {};
+export default {
+  name: "Login",
+
+  data() {
+    return {
+      error: "",
+      kerberos: ""
+    };
+  },
+
+  methods: {
+    //handles request for login
+    login: function() {
+      // resetting variables
+      this.error = "";
+      axios
+        .post("/api/users/", this.kerberos)
+        .then(() => {
+          eventBus.$emit("login-action");
+        })
+        .catch(err => {
+          this.error = err.response.data.error;
+        });
+    }
+  }
+};
 </script>
 
 
