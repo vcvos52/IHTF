@@ -1,12 +1,18 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <h2> Welcome to Have This Food!</h2>
-    </div>
-    <div v-if="logged === false">
+  <b-container fluid id="app">
+    <b-row no-gutters="true" id="nav">
+      <b-col lg="12"> 
+      <h2>
+          Welcome to Have This Food!
+      </h2>
+      </b-col>
+    </b-row>
+
+    <b-row v-if="logged === false">
       <Login/>
-    </div>
-    <div v-else-if="logged === true" class="logged">
+      <!-- Login is a b-col -->
+    </b-row>
+    <b-row v-else-if="logged === true" class="logged">
       <div v-if="currentAction === 'choice'">
         <Choice></Choice>
       </div>
@@ -18,12 +24,14 @@
       </div>
 
       <Meals></Meals>
+    </b-row>
 
-    </div>
-    <div id="copyrights">
-      Made by Surf the High C's
-    </div>
-  </div>
+    <b-row>
+      <b-col id="copyrights">
+        Made by Surf the High C's
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 
@@ -34,6 +42,9 @@ import Meals from "./components/Meals";
 import Choice from "./components/Choice";
 import Donate from "./components/Donate";
 import Receive from "./components/Receive";
+
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 export default {
   name: "app",
@@ -79,7 +90,7 @@ export default {
   font-family: "Pacifico", cursive;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  margin: 0;
+  /*margin: 0;*/
 }
 
 #nav h2 {

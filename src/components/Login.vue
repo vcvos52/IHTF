@@ -1,5 +1,5 @@
 <template>
-    <div id=login>
+    <b-col lg="12" id=login>
         <form class="component" v-on:submit.prevent='login' method="post">
             <h4> Login with your Kerberos: </h4>
             
@@ -14,12 +14,16 @@
                 <b> {{error}} </b>
             </div>
         </form>
-    </div>
+    </b-col>
 </template>
 
 
 <script>
 import { eventBus } from "../main";
+
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
+
 export default {
   name: "Login",
 
