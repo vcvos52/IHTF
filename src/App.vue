@@ -157,6 +157,7 @@ input {
 #left {
   padding-left: 50px;
   padding-right: 50px;
+  border-right: 1px solid black;
 }
 
 .preset {
