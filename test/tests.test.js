@@ -1,6 +1,8 @@
 const {
     signin,
-    getMatches
+    getMatches,
+    makeRequests,
+    makeDonation
 } = require("./services");
 
 const {
@@ -24,13 +26,38 @@ describe('Test /users', () => {
     
 
     test('GET get matches for a user', async () => {
-        let matches;
-        let user = "BigDickDaniel";
+        let user = "Daniel";
         await signin(user);
-        await getMatches(user).then(response => {
-            matches = response.data;
-        });
-        expect(matches).toBe([{"role":"host","otherPerson":"DannysSugarBaby","time":"2018-11-19T05:00:00.000Z","dining_hall_id":1}]);
+        let matches = await getMatches(user);
+        expect(JSON.parse(matches.text)).toEqual([{"role":"host","otherPerson":"Alice","time":"0000-00-00 00:00:00","diningHall":"House"}]);
+    });
+
+    test('POST receive request', async () => {
+        let kerberos = "Alice";
+        let halls = ["House"];
+        let date = "2018-11-20";
+        let intervals = [["17:00", "18:00"], ["19:00", "20:00"]]
+        let data = {diningHall: halls, date: date, hours:intervals}
+
+        await signin(kerberos);
+
+        let req = await makeRequests(data);
+        console.log(req);
+
     });    
+
+    test('POST donate request', async () => {
+        let kerberos = "Daniel";
+        let halls = ["House"];
+        let date = "2018-11-20";
+        let intervals = [["16:00", "17:00"], ["15:00", "16:00"]]
+        let data = {diningHall: halls, date: date, hours:intervals}
+
+        await signin(kerberos);
+
+        let req = await makeDonation(data);
+        console.log(req);
+
+    }); 
 
   });

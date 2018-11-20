@@ -5,10 +5,10 @@ const Users = require('./Users');
 class Requests {
   static async addRequest(type, kerberos, locations, date, intervals) {
     // TODO: check if there is outstanding request by same user at same time
-    const user_id = Users.getId(kerberos);
+    const user_id = await Users.getId(kerberos);
     const insert = `insert into request (user_id, type) values (${user_id}, '${type}');`;
     const response = await database.query(insert);
-    const request_id = response[0].id;
+    const request_id = response.id;
     intervals.forEach(async function(interval) {
       const startTime = date+interval[0]+":00";
       const endTime = date+interval[1]+":00";

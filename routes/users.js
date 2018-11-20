@@ -7,6 +7,8 @@ const router = express.Router();
 const axios = require('axios');
 
 const Users = require('../Models/Users.js')
+const Requests = require('../Models/Requests')
+
 
 
 /**
@@ -28,6 +30,19 @@ router.post('/:user', async (req, res) => {
     req.session.name = kerberos;
     res.status(201).json(kerberos).end();
 
+});
+
+/**
+ * Logout
+ * Log out of a session
+ * @name POST/api/users/logout
+ * @param user {String} - the user name
+ * @throws {401} - if user is already logged into an account
+ * @throws {403} - if the username is from MIT
+*/
+router.post('/logout', async (req, res) => {
+    req.session.name = null;
+    res.status(201).json("You logged out. Congrats.").end();
 });
 
 /**
@@ -72,15 +87,15 @@ async function shapeDate(matches, req){
         let row = matches[i];
         let newRow = {};
         // need to make sure the column names are correct
-        if (row["guest_id"] === await Users.getId(req.session.name)){
-            newRow["role"] = "guest";
-            newRow["otherPersonName"] = await Users.getKerberos(row["host_id"]);
-        } else if (row["host_id"] === await Users.getId(req.session.name)){
-            newRow["role"] = "host";
-            newRow["otherPerson"] = await Users.getKerberos(row["guest_id"]);
+        if (row.guest_id === await Users.getId(req.session.name)){
+            newRow.role = "guest";
+            newRow.otherPersonName = await Users.getKerberos(row.host_id);
+        } else if (row.host_id === await Users.getId(req.session.name)){
+            newRow.role = "host";
+            newRow.otherPerson = await Users.getKerberos(row.guest_id);
         }
-        newRow["time"] = row["time"];
-        newRow["diningHall"] = Request.getDiningName(row["dining_hall_id"]);
+        newRow.time = row.time;
+        newRow.diningHall = await Requests.getDiningName(row.dining_hall_id);
         data.push(newRow);
     }
     return data;

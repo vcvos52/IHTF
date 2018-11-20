@@ -17,10 +17,28 @@ async function signin(user) {
  */
 async function getMatches(user) {
     return requestApp
-      .get(`/api/users/matches/${user}`)
+      .get(`/api/users/matches/`)
+  }
+
+/**
+ * @param {String} user
+ */
+async function makeRequests(data) {
+    return requestApp
+      .post(`/api/requests/receive/`, data)
+  }
+
+  /**
+ * @param {String} user
+ */
+async function makeDonation(data) {
+    return requestApp
+      .post(`/api/requests/donate/`, data)
   }
 
 module.exports = {
   signin,
-  getMatches
+  getMatches,
+  makeRequests,
+  makeDonation
 };
