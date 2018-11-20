@@ -22,10 +22,10 @@ class Requests {
         const insertInterval = `insert into interval (request_id, start_time, end_time) values (${request_id}, ${startTime}, ${endTime});`;
         await database.query(insertInterval);
       });
-      const location_id = getLocationId(location);
       locations.forEach(function(location) {
+        const location_id = getLocationId(location);
         const insertLocation = `insert into location (request_id, dining_hall_id), values (${request_id}, ${location_id});`;
-        await await database.query(insertLocation);
+        await database.query(insertLocation);
       });
     }
   }
@@ -53,3 +53,5 @@ class Requests {
 
   }
 }
+
+module.exports = Requests;
