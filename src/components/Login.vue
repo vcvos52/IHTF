@@ -21,8 +21,8 @@
 <script>
 import { eventBus } from "../main";
 
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
 
 export default {
   name: "Login",
@@ -60,5 +60,9 @@ export default {
   position: fixed;
   font-family: "EB Garamond", serif;
   text-align: center;
+}
+
+h4 {
+  font-size: 120%;
 }
 </style>

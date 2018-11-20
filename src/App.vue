@@ -13,17 +13,20 @@
       <!-- Login is a b-col -->
     </b-row>
     <b-row v-else-if="logged === true" class="logged">
-      <div v-if="currentAction === 'choice'">
-        <Choice></Choice>
-      </div>
-      <div v-else-if="currentAction === 'donate'">
-        <Donate></Donate>
-      </div>
-      <div v-else-if="currentAction === 'receive'">
-        <Receive></Receive>
-      </div>
-
-      <Meals></Meals>
+      <b-col lg="8" id="left">
+        <div v-if="currentAction === 'choice'">
+          <Choice></Choice>
+        </div>
+        <div v-else-if="currentAction === 'donate'">
+          <Donate></Donate>
+        </div>
+        <div v-else-if="currentAction === 'receive'">
+          <Receive></Receive>
+        </div>
+      </b-col>
+      <b-col lg="4" id="right">
+        <Meals></Meals>
+      </b-col>
     </b-row>
 
     <b-row>
@@ -43,8 +46,8 @@ import Choice from "./components/Choice";
 import Donate from "./components/Donate";
 import Receive from "./components/Receive";
 
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
 
 export default {
   name: "app",
@@ -103,7 +106,7 @@ export default {
 
 #copyrights {
   font-family: "Pacifico", sans-serif;
-  font-size: 70%;
+  font-size: 100%;
   text-align: center;
   padding-bottom: 5px;
   border-top: 1px solid black;
