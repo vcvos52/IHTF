@@ -77,9 +77,10 @@ class Requests {
         const intervalReqId = interval.request_id;
         const sqlType = `select * from \`request\` where \`id\`=${intervalReqId} and \`type\` != '${type}';`;
         const responseType = await database.query(sqlType);
+        console.log("CLOWNNNNNN: ", responseType);
         const sqlLocationsFromSelected = `select * from \`location\` where \`request_id\`=${intervalReqId};`;
         const locationsFromSelected = await database.query(sqlLocationsFromSelected);
-        if (reqStartTime <= intervalEndTime && reqStartTime >= intervalStartTime && responseType != undefined && (!requestIdMemo.includes(requestId) || !intervalReqIdMemo.includes(intervalReqId))) {
+        if (reqStartTime <= intervalEndTime && reqStartTime >= intervalStartTime && responseType != undefined && responseType.length > 0 && (!requestIdMemo.includes(requestId) || !intervalReqIdMemo.includes(intervalReqId))) {
           console.log("FOUND VALID TIME");
           locationsReq.forEach(async function (locationReq) {
             locationsFromSelected.forEach(async function (locationSelect) {
@@ -91,18 +92,28 @@ class Requests {
                 chosenLocationId = locationReq.dining_hall_id;
                 console.log("chosen date", chosenDate);
                 if (type == 'host') {
+<<<<<<< HEAD
                   const requestIdUserId = await database.query(`select * from request where id =${requestId};`)[0].user_id;
                   const intervalReqIdUserId = await database.query(`select * from request where id =${intervalReqId};`)[0].user_id;
                   const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${requestIdUserId}, ${intervalReqIdUserId}, ${chosenLocationId});`;
+=======
+                  const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${user}, ${responseType[0].user_id}, ${chosenLocationId});`;
+                  console.log(mealSql);
+>>>>>>> 743c5148c3cb712884e570643c4d74d80b7f0759
                   await database.query(mealSql);
                   requestIdMemo.push(requestId);
                   intervalReqIdMemo.push(intervalReqId);
                   return true;
                 }
                 else {
+<<<<<<< HEAD
                   const requestIdUserId = await database.query(`select * from request where id =${requestId};`)[0].user_id;
                   const intervalReqIdUserId = await database.query(`select * from request where id =${intervalReqId};`)[0].user_id;
                   const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${intervalReqIdUserId}, ${requestIdUserId}, ${chosenLocationId});`;
+=======
+                  const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${responseType[0].user_id}, ${user}, ${chosenLocationId});`;
+                  console.log(mealSql);
+>>>>>>> 743c5148c3cb712884e570643c4d74d80b7f0759
                   await database.query(mealSql);
                   requestIdMemo.push(requestId);
                   intervalReqIdMemo.push(intervalReqId);
@@ -112,7 +123,7 @@ class Requests {
             });
           });
         }
-        else if (reqEndTime <= intervalEndTime && reqEndTime >= intervalStartTime && responseType != undefined && (!requestIdMemo.includes(requestId) || !intervalReqIdMemo.includes(intervalReqId))) {
+        else if (reqEndTime <= intervalEndTime && reqEndTime >= intervalStartTime && responseType != undefined && responseType.length > 0 && (!requestIdMemo.includes(requestId) || !intervalReqIdMemo.includes(intervalReqId))) {
           console.log("FOUND VALID TIME");
           locationsReq.forEach(async function (locationReq) {
             locationsFromSelected.forEach(async function (locationSelect) {
@@ -123,18 +134,28 @@ class Requests {
                 chosenLocationId = locationReq.dining_hall_id;
                 console.log("chosen date", chosenDate);
                 if (type == 'host') {
+<<<<<<< HEAD
                   const requestIdUserId = await database.query(`select * from request where id =${requestId};`)[0].user_id;
                   const intervalReqIdUserId = await database.query(`select * from request where id =${intervalReqId};`)[0].user_id;
                   const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${requestIdUserId}, ${intervalReqIdUserId}, ${chosenLocationId});`;
+=======
+                  const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${user}, ${responseType[0].user_id}, ${chosenLocationId});`;
+                  console.log(mealSql);
+>>>>>>> 743c5148c3cb712884e570643c4d74d80b7f0759
                   await database.query(mealSql);
                   requestIdMemo.push(requestId);
                   intervalReqIdMemo.push(intervalReqId);
                   return true;
                 }
                 else {
+<<<<<<< HEAD
                   const requestIdUserId = await database.query(`select * from request where id =${requestId};`)[0].user_id;
                   const intervalReqIdUserId = await database.query(`select * from request where id =${intervalReqId};`)[0].user_id;
                   const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${intervalReqIdUserId}, ${requestIdUserId}, ${chosenLocationId});`;
+=======
+                  const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${responseType[0].user_id}, ${user}, ${chosenLocationId});`;
+                  console.log(mealSql);
+>>>>>>> 743c5148c3cb712884e570643c4d74d80b7f0759
                   await database.query(mealSql);
                   requestIdMemo.push(requestId);
                   intervalReqIdMemo.push(intervalReqId);
