@@ -19,11 +19,7 @@ class Requests {
     });
     locations.forEach(async function (location) {
       const diningHallId = await Requests.getDiningId(location);
-<<<<<<< HEAD
-      const insertLocation = `INSERT INTO \`location\` (\`request_id\`, \`dining_hall_id\`), values (${requestID}, ${diningHallId});`;
-=======
       const insertLocation = `insert into \`location\`(\`request_id\`, \`dining_hall_id\`) VALUES (${requestID}, ${diningHallId});`;
->>>>>>> origin/vue-components
       await database.query(insertLocation);
     });
     return await Requests.match(requestID);
@@ -62,11 +58,7 @@ class Requests {
     const intervalsReq = await database.query(`select * from \`interval\` where \`request_id\`=${requestId};`);
     const locationsReq = await database.query(`select * from \`location\` where \`request_id\`=${requestId};`);
 
-<<<<<<< HEAD
-    const allIntervals = await database.query(`select * from interval where request_id!=${requestId};`);
-=======
     const allIntervals = await database.query(`select * from \`interval\` where \`request_id\` <> ${requestId};`);
->>>>>>> origin/vue-components
 
     let chosenDate = "";
     let chosenLocationId = -1;
@@ -78,29 +70,31 @@ class Requests {
         const intervalStartTime = new Date(interval.start_time);
         const intervalEndTime = new Date(interval.end_time);
         const intervalReqId = interval.request_id;
-<<<<<<< HEAD
-        const sqlType = `select * from request where request_id=${intervalReqId} and type!=${type};`;
-=======
         const sqlType = `select * from \`request\` where \`id\`=${intervalReqId} and \`type\` != '${type}';`;
->>>>>>> origin/vue-components
         const responseType = await database.query(sqlType);
         const sqlLocationsFromSelected = `select * from \`location\` where \`request_id\`=${intervalReqId};`;
         const locationsFromSelected = await database.query(sqlLocationsFromSelected);
         if (reqStartTime <= intervalEndTime && reqStartTime >= intervalStartTime && responseType != undefined) {
-          chosenDate = reqStartTime;
+          console.log("FOUND VALID TIME");
           locationsReq.forEach(async function (locationReq) {
             locationsFromSelected.forEach(async function (locationSelect) {
+              console.log("request location: ", locationReq.dining_hall_id);
+              console.log("current selected request location: ", locationSelect.dining_hall_id);
               if (locationReq.dining_hall_id == locationSelect.dining_hall_id) {
+                chosenDate = reqStartTime;
                 chosenLocationId = locationReq.dining_hall_id;
               }
             });
           });
         }
         else if (reqEndTime <= intervalEndTime && reqEndTime >= intervalStartTime && responseType != undefined) {
-          chosenDate = reqEndTime;
+          console.log("FOUND VALID TIME");
           locationsReq.forEach(async function (locationReq) {
             locationsFromSelected.forEach(async function (locationSelect) {
+              console.log("request location: ", locationReq.dining_hall_id);
+              console.log("current selected request location: ", locationSelect.dining_hall_id);
               if (locationReq.dining_hall_id == locationSelect.dining_hall_id) {
+                chosenDate = reqEndTime;
                 chosenLocationId = locationReq.dining_hall_id;
               }
             });
@@ -112,7 +106,10 @@ class Requests {
       });
     });
 
+    console.log("chosen location id: ", chosenLocationId);
+    console.log("chosen date: ", chosenDate);
     if (chosenLocationId != -1) {
+      console.log("FOUND MATCH");
       let hostId = -1;
       let guestId = -1;
       if (type == 'host') {
