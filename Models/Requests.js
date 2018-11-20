@@ -81,8 +81,20 @@ class Requests {
               console.log("request location: ", locationReq.dining_hall_id);
               console.log("current selected request location: ", locationSelect.dining_hall_id);
               if (locationReq.dining_hall_id == locationSelect.dining_hall_id) {
-                chosenDate = reqStartTime;
+                console.log("setting values 0");
+                chosenDate = intervalReq.start_time;
                 chosenLocationId = locationReq.dining_hall_id;
+                console.log("chosen date", chosenDate);
+                if (type == 'host') {
+                  const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${requestId}, ${intervalReqId}, ${chosenLocationId});`;
+                  await database.query(mealSql);
+                  return true;
+                }
+                else {
+                  const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${intervalReqId}, ${requestId}, ${chosenLocationId});`;
+                  await database.query(mealSql);
+                  return true;
+                }
               }
             });
           });
@@ -94,8 +106,19 @@ class Requests {
               console.log("request location: ", locationReq.dining_hall_id);
               console.log("current selected request location: ", locationSelect.dining_hall_id);
               if (locationReq.dining_hall_id == locationSelect.dining_hall_id) {
-                chosenDate = reqEndTime;
+                chosenDate = intervalReq.end_time;
                 chosenLocationId = locationReq.dining_hall_id;
+                console.log("chosen date", chosenDate);
+                if (type == 'host') {
+                  const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${requestId}, ${intervalReqId}, ${chosenLocationId});`;
+                  await database.query(mealSql);
+                  return true;
+                }
+                else {
+                  const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${intervalReqId}, ${requestId}, ${chosenLocationId});`;
+                  await database.query(mealSql);
+                  return true;
+                }
               }
             });
           });
@@ -105,28 +128,7 @@ class Requests {
         }
       });
     });
-
-    console.log("chosen location id: ", chosenLocationId);
-    console.log("chosen date: ", chosenDate);
-    if (chosenLocationId != -1) {
-      console.log("FOUND MATCH");
-      let hostId = -1;
-      let guestId = -1;
-      if (type == 'host') {
-        hostId = requestId;
-        guestId = intervalReqId;
-      }
-      else {
-        hostId = intervalReqId;
-        guestId = requestId;
-      }
-      const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values(${chosenDate}, ${hostId}, ${guestId}, ${chosenLocationId});`;
-      await database.query(mealSql);
-      return true;
-    }
-    else {
-      return false;
-    }
+    return false;
   }
 }
 
