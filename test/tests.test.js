@@ -25,39 +25,42 @@ describe('Test /users', () => {
     // });
     
 
-    test('GET get matches for a user', async () => {
-        let user = "Daniel";
-        await signin(user);
-        let matches = await getMatches(user);
-        expect(JSON.parse(matches.text)).toEqual([{"role":"host","otherPerson":"Alice","time":"0000-00-00 00:00:00","diningHall":"House"}]);
-    });
+    // test('GET get matches for a user', async () => {
+    //     let user = "Daniel";
+    //     await signin(user);
+    //     let matches = await getMatches(user);
+    //     expect(JSON.parse(matches.text)).toEqual([{"role":"host","otherPerson":"Alice","time":"0000-00-00 00:00:00","diningHall":"House"}]);
+    // });
 
     test('POST receive request', async () => {
+        data = new URLSearchParams();
         let kerberos = "Alice";
-        let halls = ["House"];
-        let date = "2018-11-20";
-        let intervals = [["17:00", "18:00"], ["19:00", "20:00"]]
-        let data = {diningHall: halls, date: date, hours:intervals}
-
+        data.append('halls', ["House"]);
+        data.append('date', "2018-11-20");
+        data.append('intervals', [["17:00", "18:00"], ["19:00", "20:00"]]);
+        // let halls = ["House"];
+        // let date = "2018-11-20";
+        // let intervals = [["17:00", "18:00"], ["19:00", "20:00"]];
+        // const data = { "diningHall": halls, "date": date, "hours": intervals };
         await signin(kerberos);
 
-        let req = await makeRequests(data);
+        let req = await makeRequests();
         console.log(req);
 
     });    
 
-    test('POST donate request', async () => {
-        let kerberos = "Daniel";
-        let halls = ["House"];
-        let date = "2018-11-20";
-        let intervals = [["16:00", "17:00"], ["15:00", "16:00"]]
-        let data = {diningHall: halls, date: date, hours:intervals}
+    // test('POST donate request', async () => {
+    //     let kerberos = "Daniel";
+    //     let halls = ["House"];
+    //     let date = "2018-11-20";
+    //     let intervals = [["16:00", "17:00"], ["15:00", "16:00"]]
+    //     let data = {diningHall: halls, date: date, hours:intervals}
 
-        await signin(kerberos);
+    //     await signin(kerberos);
 
-        let req = await makeDonation(data);
-        console.log(req);
+    //     let req = await makeDonation(data);
+    //     console.log(req);
 
-    }); 
+    // }); 
 
   });
