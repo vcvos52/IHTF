@@ -3,7 +3,7 @@
     <b-row :no-gutters="true" id="nav">
       <b-col lg="12"> 
       <h2 @click='goHome' id="home-button">
-          Welcome to Have This Food!
+          Welcome to I Have This Food!
       </h2>
       </b-col>
     </b-row>
@@ -151,13 +151,19 @@ input {
 .not-logged {
   font-family: "EB Garamond", serif;
   padding-top: 40px;
-  padding-bottom: 50px;
 }
 
 #left {
   padding-left: 50px;
   padding-right: 50px;
   border-right: 1px solid black;
+}
+
+#right {
+  padding-left: 50px;
+  padding-right: 50px;
+  border-right: 1px solid black;
+  padding-bottom: 50px;
 }
 
 .preset {
@@ -178,9 +184,5 @@ p {
 
 option {
   background-color: white;
-}
-
-.card {
-  border-color: black;
 }
 </style>

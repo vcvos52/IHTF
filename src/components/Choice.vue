@@ -1,12 +1,12 @@
 <template>
-    <b-row id="choice">
+    <b-row>
         <b-col>
             <b-card title="Donate a Meal!"
-                      :img-src="require('../assets/donate.png')"
+                      img-src="https://picsum.photos/600/300/?image=25"
                       img-alt="Image"
                       img-top
                       tag="article"
-                      class="card">
+                      class="mb-2">
                 <p class="card-text">
                   Give someone a meal you don't need!
                 </p>
@@ -17,13 +17,13 @@
         </b-col>
         <b-col>
             <b-card title="Receive a Meal!"
-                      :img-src="require('../assets/receive.jpg')"
+                      img-src="https://picsum.photos/600/300/?image=25"
                       img-alt="Image"
                       img-top
                       tag="article"
-                      class="card">
+                      class="mb-2">
                 <p class="card-text">
-                  Give someone a meal you don't need!
+                  Receive a meal if you so desire!
                 </p>
                 <b-form @submit.prevent="chooseReceive">
                     <b-button type="submit" class="button">Receive</b-button>
@@ -58,8 +58,5 @@ export default {
 };
 </script>
 
-<style scoped>
-#choice {
-  text-align: center;
-}
+<style lang="css" scoped>
 </style>
