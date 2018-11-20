@@ -20,7 +20,6 @@
 
 <script>
 import { eventBus } from "../main";
-import axios from 'axios';
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
