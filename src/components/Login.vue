@@ -41,7 +41,7 @@ export default {
       // resetting variables
       this.error = "";
       axios
-        .post("/api/users/", this.kerberos)
+        .post("/api/users/" + this.kerberos)
         .then(() => {
           eventBus.$emit("login-action");
         })
