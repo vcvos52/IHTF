@@ -29,8 +29,6 @@ export default {
   data() {
     return {
       meals: [
-        { otherPerson: "Giulio", time: "5:00PM", diningHall: "McCormick" },
-        { otherPerson: "Husayn", time: "7:00PM", diningHall: "Maseeh" }
       ]
     };
   },
@@ -48,9 +46,10 @@ export default {
   },
 
   created: function() {
-    // setInterval(() => {
-    //   this.loadMeals();
-    // }, 3000);
+    this.loadMeals();
+    setInterval(() => {
+      this.loadMeals();
+    }, 3000);
   }
 };
 </script>

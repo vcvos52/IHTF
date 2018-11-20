@@ -6,8 +6,10 @@ class Requests {
   static async addRequest(type, kerberos, locations, date, intervals) {
     // TODO: check if there is outstanding request by same user at same time
     const userId = await Users.getId(kerberos);
+    console.log("THE USER ID CURRENTLY USED IS ", userId);
     const insert = `insert into request (user_id, type) values (${userId}, '${type}');`;
     const response = await database.query(insert);
+    console.log("THE RESPONSE RECEIVED IS: ", response);
     const sqlGetRequestID = `select id from request where user_id=${userId} and type='${type}';`;
     const s = await database.query(sqlGetRequestID);
     const requestID = s[s.length - 1].id;
@@ -63,6 +65,9 @@ class Requests {
     let chosenDate = "";
     let chosenLocationId = -1;
     const narrowedRequests = [];
+    const requestIdMemo = [];
+    const intervalReqIdMemo = [];
+    // requestId intervalReqId
     intervalsReq.forEach(async function (intervalReq) {
       allIntervals.forEach(async function (interval) {
         const reqStartTime = new Date(intervalReq.start_time);
@@ -74,7 +79,7 @@ class Requests {
         const responseType = await database.query(sqlType);
         const sqlLocationsFromSelected = `select * from \`location\` where \`request_id\`=${intervalReqId};`;
         const locationsFromSelected = await database.query(sqlLocationsFromSelected);
-        if (reqStartTime <= intervalEndTime && reqStartTime >= intervalStartTime && responseType != undefined) {
+        if (reqStartTime <= intervalEndTime && reqStartTime >= intervalStartTime && responseType != undefined && (!requestIdMemo.includes(requestId) || !intervalReqIdMemo.includes(intervalReqId))) {
           console.log("FOUND VALID TIME");
           locationsReq.forEach(async function (locationReq) {
             locationsFromSelected.forEach(async function (locationSelect) {
@@ -88,18 +93,22 @@ class Requests {
                 if (type == 'host') {
                   const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${requestId}, ${intervalReqId}, ${chosenLocationId});`;
                   await database.query(mealSql);
+                  requestIdMemo.push(requestId);
+                  intervalReqIdMemo.push(intervalReqId);
                   return true;
                 }
                 else {
                   const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${intervalReqId}, ${requestId}, ${chosenLocationId});`;
                   await database.query(mealSql);
+                  requestIdMemo.push(requestId);
+                  intervalReqIdMemo.push(intervalReqId);
                   return true;
                 }
               }
             });
           });
         }
-        else if (reqEndTime <= intervalEndTime && reqEndTime >= intervalStartTime && responseType != undefined) {
+        else if (reqEndTime <= intervalEndTime && reqEndTime >= intervalStartTime && responseType != undefined && (!requestIdMemo.includes(requestId) || !intervalReqIdMemo.includes(intervalReqId))) {
           console.log("FOUND VALID TIME");
           locationsReq.forEach(async function (locationReq) {
             locationsFromSelected.forEach(async function (locationSelect) {
@@ -112,11 +121,15 @@ class Requests {
                 if (type == 'host') {
                   const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${requestId}, ${intervalReqId}, ${chosenLocationId});`;
                   await database.query(mealSql);
+                  requestIdMemo.push(requestId);
+                  intervalReqIdMemo.push(intervalReqId);
                   return true;
                 }
                 else {
                   const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${intervalReqId}, ${requestId}, ${chosenLocationId});`;
                   await database.query(mealSql);
+                  requestIdMemo.push(requestId);
+                  intervalReqIdMemo.push(intervalReqId);
                   return true;
                 }
               }
