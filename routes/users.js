@@ -23,7 +23,7 @@ const Requests = require('../Models/Requests')
 router.post('/:user', async (req, res) => {
     let kerberos = req.params.user;
     // if the kerberos does not exist, return that
-    if (!(await Users.userExists(kerberos))){
+    if (!(await Users.userExists(kerberos))) {
         res.status(403).json("This is not a valid user.").end();
         return;
     }
@@ -40,7 +40,7 @@ router.post('/:user', async (req, res) => {
  * @throws {401} - if user is already logged into an account
  * @throws {403} - if the username is from MIT
 */
-router.post('/logout', async (req, res) => {
+router.put('/logout', async (req, res) => {
     req.session.name = null;
     res.status(201).json("You logged out. Congrats.").end();
 });
@@ -57,16 +57,16 @@ router.post('/logout', async (req, res) => {
 router.get('/matches', async (req, res) => {
     let kerberos = req.session.name;
     // if the kerberos does not exist, return that
-    if (!(await Users.userExists(kerberos))){
+    if (!(await Users.userExists(kerberos))) {
         res.status(403).json("This is not a valid user.").end();
         return;
     }
     let matches = await Users.getMatches(kerberos);
-    if (!(matches)){
+    if (!(matches)) {
         res.status(404).json("This user is not matched.").end();
         return;
     }
-    if (req.session.name !== kerberos){
+    if (req.session.name !== kerberos) {
         res.status(403).json("You do not have permission to edit this freet.").end();
         return;
     }
@@ -81,16 +81,16 @@ router.get('/matches', async (req, res) => {
  * @param matches {List<JSON>} - [{id{Integer}: , time{datetime}: , host_id{Integer}: , guest_id{Integer}: , dining_hall_id{Integer}: }, ...]
  * @returns {List<JSON>} - [{role{String}: , otherPerson{String}: , diningHall{String}: , time{datetime}: }, ...]
  */
-async function shapeDate(matches, req){
+async function shapeDate(matches, req) {
     let data = [];
-    for (let i = 0; i < matches.length; i++){
+    for (let i = 0; i < matches.length; i++) {
         let row = matches[i];
         let newRow = {};
         // need to make sure the column names are correct
-        if (row.guest_id === await Users.getId(req.session.name)){
+        if (row.guest_id === await Users.getId(req.session.name)) {
             newRow.role = "guest";
             newRow.otherPersonName = await Users.getKerberos(row.host_id);
-        } else if (row.host_id === await Users.getId(req.session.name)){
+        } else if (row.host_id === await Users.getId(req.session.name)) {
             newRow.role = "host";
             newRow.otherPerson = await Users.getKerberos(row.guest_id);
         }

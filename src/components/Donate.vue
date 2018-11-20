@@ -76,7 +76,7 @@ export default {
           eventBus.$emit("update-action", "choice");
         })
         .catch(err => {
-          this.error = err.response.data.error;
+          this.error = err.response.data;
         });
     }
   }
