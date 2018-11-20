@@ -4,13 +4,13 @@ const Users = require('../Users');
 class Requests {
   static async addRequest(type, kerberos, locations, intervals) {
     const id = Users.getId(kerberos);
-    if requestExists(kerberos, type) {
+    if (requestExists(kerberos, type)) {
       // outstanding request of same type already exists
       return false;
     }
     // request does not exist already
     else {
-      const insert = `insert into request (user_id, type) values (${id}, ${type});`;
+      const insert = `insert into request (user_id, type) values (${id}, '${type}');`;
       const response = await database.query(insert);
       const request_id = response[0].id;
       intervals.forEach(function(interval) {
@@ -30,7 +30,7 @@ class Requests {
   static async requestExists(kerberos, type) {
     const id = Users.getId(kerberos);
     if (id) {
-      const sql = `select * from request where user_id=${id} and type=${type};`;
+      const sql = `select * from request where user_id=${id} and type='${type}';`;
       const response = await database.query(sql);
       if (response) {
         return true;
