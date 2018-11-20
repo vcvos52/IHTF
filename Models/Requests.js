@@ -14,17 +14,15 @@ class Requests {
     intervals.forEach(async function (interval) {
       const startTime = date + " " + interval[0] + ":00";
       const endTime = date + " " + interval[1] + ":00";
-      console.log("HHHHHHHHHH", endTime);
-      console.log("REQUEST ID", requestID);
-      const insertInterval = `INSERT INTO \`interval\` (\`request_id\`, \`start_time\`, \`end_time\`) VALUES (${requestID}, '${startTime}', '${endTime}');`;
+      const insertInterval = `insert into \`interval\` (\`request_id\`, \`start_time\`, \`end_time\`) VALUES (${requestID}, '${startTime}', '${endTime}');`;
       await database.query(insertInterval);
     });
     locations.forEach(async function (location) {
       const diningHallId = await Requests.getDiningId(location);
-      const insertLocation = `insert into \`location\` (\`request_id\`, \`dining_hall_id\`), values (${requestID}, ${diningHallId});`;
+      const insertLocation = `insert into \`location\`(\`request_id\`, \`dining_hall_id\`) VALUES (${requestID}, ${diningHallId});`;
       await database.query(insertLocation);
     });
-    return await match(requestId);
+    return await Requests.match(requestID);
   }
 
   static async requestExists(kerberos, type) {
@@ -57,24 +55,24 @@ class Requests {
     const response = await database.query(requestQuery);
     const user = response[0].user_id;
     const type = response[0].type;
-    const intervalsReq = await database.query(`select * from \`interval\` where request_id=${requestId};`);
-    const locationsReq = await database.query(`select * from location where request_id=${requestId};`);
+    const intervalsReq = await database.query(`select * from \`interval\` where \`request_id\`=${requestId};`);
+    const locationsReq = await database.query(`select * from \`location\` where \`request_id\`=${requestId};`);
 
-    const allIntervals = await database.query(`select * from interval where not(request_id=${requestId});`);
+    const allIntervals = await database.query(`select * from \`interval\` where \`request_id\` <> ${requestId};`);
 
     let chosenDate = "";
     let chosenLocationId = -1;
     const narrowedRequests = [];
     intervalsReq.forEach(async function (intervalReq) {
-      intervalAlls.forEach(async function (interval) {
+      allIntervals.forEach(async function (interval) {
         const reqStartTime = new Date(intervalReq.start_time);
         const reqEndTime = new Date(intervalReq.end_time);
         const intervalStartTime = new Date(interval.start_time);
         const intervalEndTime = new Date(interval.end_time);
         const intervalReqId = interval.request_id;
-        const sqlType = `select * from request where request_id=${intervalReqId} and not(type=${type});`;
+        const sqlType = `select * from \`request\` where \`id\`=${intervalReqId} and \`type\` != '${type}';`;
         const responseType = await database.query(sqlType);
-        const sqlLocationsFromSelected = `select * from location where request_id=${intervalReqId};`;
+        const sqlLocationsFromSelected = `select * from \`location\` where \`request_id\`=${intervalReqId};`;
         const locationsFromSelected = await database.query(sqlLocationsFromSelected);
         if (reqStartTime <= intervalEndTime && reqStartTime >= intervalStartTime && responseType != undefined) {
           chosenDate = reqStartTime;
