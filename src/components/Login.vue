@@ -40,7 +40,6 @@ export default {
     login: function() {
       // resetting variables
       this.error = "";
-      console.log(`/api/users/${this.kerberos}`);
       axios
         .post(`/api/users/${this.kerberos}`)
         .then(() => {
