@@ -1,4 +1,4 @@
-const database = requiore('../database');
+const database = require('../database');
 
 class Users {
  /**
