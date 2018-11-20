@@ -75,7 +75,7 @@ export default {
           eventBus.$emit("update-action", "choice");
         })
         .catch(err => {
-          this.error = "Donation request failed";
+          this.error = err.response.data.error;
         });
     }
   }
