@@ -48,9 +48,9 @@ export default {
   },
 
   created: function() {
-    setInterval(() => {
-      this.loadMeals();
-    }, 3000);
+    // setInterval(() => {
+    //   this.loadMeals();
+    // }, 3000);
   }
 };
 </script>
