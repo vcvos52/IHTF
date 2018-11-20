@@ -1,12 +1,16 @@
 <template>
-    <div>
-        hi
-    </div>
+    <div></div>
 </template>
 
 <script>
-export default {};
+export default {
+  name: "Meals",
+
+  data() {
+    return {};
+  }
+};
 </script>
 
-<style scoped>
+<style lang="css" scoped>
 </style>
