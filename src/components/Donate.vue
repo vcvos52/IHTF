@@ -70,10 +70,11 @@ export default {
         hours: this.hours
       };
       axios
-        .post("/api/request/donate/", bodyContent)
-        .then(() => {
+        .post("/api/requests/donate/", bodyContent)
+        .then(res => {
           this.success = "Donation request made";
           eventBus.$emit("update-action", "choice");
+          alert(res.data);
         })
         .catch(err => {
           this.error = err.response.data;
