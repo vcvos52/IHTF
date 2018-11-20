@@ -5,7 +5,6 @@ const Users = require('./Users');
 class Requests {
   static async addRequest(type, kerberos, locations, date, intervals) {
     // TODO: check if there is outstanding request by same user at same time
-    // 
     const userId = await Users.getId(kerberos);
     const insert = `insert into request (user_id, type) values (${userId}, '${type}');`;
     const response = await database.query(insert);

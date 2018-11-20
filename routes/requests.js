@@ -35,12 +35,14 @@ router.post('/donate', async (req, res) => {
  * @returns {Request} - the request created
 */
 router.post('/receive', async (req, res) => {
+    console.log("PROCESSING REQUEST");
+    console.log("body", req.body);
     let kerberos = req.session.name;
     let diningHalls = req.body.diningHalls;
     let intervals = req.body.hours;
     let date = req.body.date;
     await Requests.addRequest("guest", kerberos, diningHalls, date, intervals);
-    res.status(201).json("Reception request added").end();
+    res.status(201).json({success: "Reception request added"}).end();
 });
 
 

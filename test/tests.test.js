@@ -6,7 +6,7 @@ const {
 } = require("./services");
 
 const {
-    randomUser, 
+    randomUser,
 } = require('./utils');
 
 const database = require('../database.js');
@@ -23,7 +23,7 @@ describe('Test /users', () => {
     // afterEach(async() => {
     //     await database.clearTables();
     // });
-    
+
 
     // test('GET get matches for a user', async () => {
     //     let user = "Daniel";
@@ -33,21 +33,16 @@ describe('Test /users', () => {
     // });
 
     test('POST receive request', async () => {
-        data = new URLSearchParams();
-        let kerberos = "Alice";
-        data.append('halls', ["House"]);
-        data.append('date', "2018-11-20");
-        data.append('intervals', [["17:00", "18:00"], ["19:00", "20:00"]]);
-        // let halls = ["House"];
-        // let date = "2018-11-20";
-        // let intervals = [["17:00", "18:00"], ["19:00", "20:00"]];
-        // const data = { "diningHall": halls, "date": date, "hours": intervals };
+        let kerberos = "Alice"
+        let halls = ["House"];
+        let date = "2018-11-20";
+        let intervals = [("17:00", "18:00"), ("19:00", "20:00")];
+        // const data = { diningHall: halls, date: date, hours: intervals };
+        const data = { username: "husayn" };
+        console.log("data", data);
         await signin(kerberos);
-
-        let req = await makeRequests();
-        console.log(req);
-
-    });    
+        let req = await makeRequests(data);
+    });
 
     // test('POST donate request', async () => {
     //     let kerberos = "Daniel";
@@ -61,6 +56,6 @@ describe('Test /users', () => {
     //     let req = await makeDonation(data);
     //     console.log(req);
 
-    // }); 
+    // });
 
   });

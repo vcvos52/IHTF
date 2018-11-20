@@ -23,13 +23,10 @@ async function getMatches(user) {
 /**
  * @param {String} user
  */
-async function makeRequests() {
-    let halls = ["House"];
-    let date = "2018-11-20";
-    let intervals = [["17:00", "18:00"], ["19:00", "20:00"]];
-    const data = `{ "diningHall": halls, "date": date, "hours": intervals }`;
+async function makeRequests(data) {
+    console.log("in make request", data);
     return requestApp.post(`/api/requests/receive/`, data);
-  }
+}
 
   /**
  * @param {String} user
