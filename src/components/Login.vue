@@ -23,6 +23,7 @@ import { eventBus } from "../main";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
+import axios from "axios";
 
 export default {
   name: "Login",
@@ -58,7 +59,6 @@ export default {
   padding-top: 40px;
   width: 100%;
   position: fixed;
-  font-family: "EB Garamond", serif;
   text-align: center;
 }
 

@@ -1,6 +1,6 @@
 <template>
   <b-container fluid id="app">
-    <b-row no-gutters="true" id="nav">
+    <b-row :no-gutters="true" id="nav">
       <b-col lg="12"> 
       <h2>
           Welcome to Have This Food!
@@ -8,7 +8,7 @@
       </b-col>
     </b-row>
 
-    <b-row v-if="logged === false">
+    <b-row v-if="logged === false" class="not-logged">
       <Login/>
       <!-- Login is a b-col -->
     </b-row>
@@ -26,7 +26,7 @@
       </b-col>
       <b-col lg="4" id="right">
         <Meals></Meals>
-      </b-col>
+      </b-col> 
     </b-row>
 
     <b-row>
@@ -71,6 +71,7 @@ export default {
   // the app will change (read by this eventBus)
   created: function() {
     eventBus.$on("update-action", res => {
+      console.log("hello");
       this.currentAction = res;
     });
     eventBus.$on("login-action", () => {
@@ -93,7 +94,7 @@ export default {
   font-family: "Pacifico", cursive;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /*margin: 0;*/
+  padding: 0;
 }
 
 #nav h2 {
@@ -117,6 +118,7 @@ export default {
 
 .button {
   margin-top: 10px;
+  background-color: #f1b101;
 }
 
 input {
@@ -125,8 +127,39 @@ input {
   background-color: white;
 }
 
+.success-message {
+  padding: 30px;
+  color: green;
+}
+
 .error-message {
   padding: 30px;
   color: red;
+}
+
+.logged,
+.not-logged {
+  font-family: "EB Garamond", serif;
+  padding-top: 40px;
+}
+
+.preset {
+  margin: 5px;
+}
+
+.multi-select,
+.date {
+  background-color: white;
+  margin: 10px;
+}
+
+p {
+  margin: 0;
+  padding-bottom: 0;
+  padding-top: 20px;
+}
+
+option {
+  background-color: white;
 }
 </style>
