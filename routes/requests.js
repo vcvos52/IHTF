@@ -22,7 +22,7 @@ router.post('/donate', async (req, res) => {
     let intervals = req.body.hours;
     let date = req.body.date;
     await Requests.addRequest("host", kerberos, diningHalls, date, intervals);
-    res.status(201).json("Donation request added").end();
+    res.status(201).json("Donation request added. Check Upcoming Meals to see if you were matched").end();
 
 });
 
