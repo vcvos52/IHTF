@@ -25,7 +25,8 @@ async function getMatches(user) {
  */
 async function makeRequests(data) {
     console.log("in make request", data);
-    return requestApp.post(`/api/requests/receive/`, data);
+    return requestApp
+      .post('/api/requests/receive/', data);
 }
 
   /**

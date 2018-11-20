@@ -18,11 +18,11 @@ class Requests {
     });
     locations.forEach(async function(location) {
 
-      const diningHallId = getDiningId(location);
+      const diningHallId = await getDiningId(location);
       const insertLocation = `insert into location (request_id, dining_hall_id), values (${requestId}, ${diningHallId});`;
       await database.query(insertLocation);
     });
-    return match(requestId);
+    return await match(requestId);
   }
 
   static async requestExists(kerberos, type) {

@@ -39,7 +39,6 @@ describe('Test /users', () => {
         let intervals = [("17:00", "18:00"), ("19:00", "20:00")];
         // const data = { diningHall: halls, date: date, hours: intervals };
         const data = { username: "husayn" };
-        console.log("data", data);
         await signin(kerberos);
         let req = await makeRequests(data);
     });
