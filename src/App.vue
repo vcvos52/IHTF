@@ -71,7 +71,6 @@ export default {
   // the app will change (read by this eventBus)
   created: function() {
     eventBus.$on("update-action", res => {
-      console.log("hello");
       this.currentAction = res;
     });
     eventBus.$on("login-action", () => {
@@ -152,6 +151,7 @@ input {
 .not-logged {
   font-family: "EB Garamond", serif;
   padding-top: 40px;
+  padding-bottom: 50px;
 }
 
 #left {

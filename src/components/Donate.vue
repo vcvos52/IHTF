@@ -4,10 +4,11 @@
         <b-col lg='6' id="donate">
             <b-form class="component" @submit.prevent="donateRequest">
                 <h4> Donate a Meal! </h4>
+                <p> Select the dining halls at which you could meet your match <br> (ctrl-select to select multiple):</p>
                 <b-form-select multiple :select-size="4" v-model="diningHalls" :options="diningOptions" class="preset" />
                 <p> Select the date:</p>
                 <b-form-input v-model="date" type="date" class="date"/>
-                <p> Select the times in which you can donate (ctrl-f to select multiple):</p>
+                <p> Select the times in which you can donate <br> (ctrl-select to select multiple):</p>
                 <b-form-select multiple :select-size="4" v-model="hours" :options="hourOptions" class="multi-select"/>
                 <b-button type="submit" class="button">Submit</b-button>
             </b-form>
@@ -75,6 +76,7 @@ export default {
           eventBus.$emit("update-action", "choice");
         })
         .catch(err => {
+          console.log(bodyContent);
           this.error = err.response.data.error;
         });
     }
