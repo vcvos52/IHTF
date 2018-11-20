@@ -91,14 +91,18 @@ class Requests {
                 chosenLocationId = locationReq.dining_hall_id;
                 console.log("chosen date", chosenDate);
                 if (type == 'host') {
-                  const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${requestId}, ${intervalReqId}, ${chosenLocationId});`;
+                  const requestIdUserId = await database.query(`select * from request where id =${requestId};`)[0].user_id;
+                  const intervalReqIdUserId = await database.query(`select * from request where id =${intervalReqId};`)[0].user_id;
+                  const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${requestIdUserId}, ${intervalReqIdUserId}, ${chosenLocationId});`;
                   await database.query(mealSql);
                   requestIdMemo.push(requestId);
                   intervalReqIdMemo.push(intervalReqId);
                   return true;
                 }
                 else {
-                  const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${intervalReqId}, ${requestId}, ${chosenLocationId});`;
+                  const requestIdUserId = await database.query(`select * from request where id =${requestId};`)[0].user_id;
+                  const intervalReqIdUserId = await database.query(`select * from request where id =${intervalReqId};`)[0].user_id;
+                  const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${intervalReqIdUserId}, ${requestIdUserId}, ${chosenLocationId});`;
                   await database.query(mealSql);
                   requestIdMemo.push(requestId);
                   intervalReqIdMemo.push(intervalReqId);
@@ -119,14 +123,18 @@ class Requests {
                 chosenLocationId = locationReq.dining_hall_id;
                 console.log("chosen date", chosenDate);
                 if (type == 'host') {
-                  const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${requestId}, ${intervalReqId}, ${chosenLocationId});`;
+                  const requestIdUserId = await database.query(`select * from request where id =${requestId};`)[0].user_id;
+                  const intervalReqIdUserId = await database.query(`select * from request where id =${intervalReqId};`)[0].user_id;
+                  const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${requestIdUserId}, ${intervalReqIdUserId}, ${chosenLocationId});`;
                   await database.query(mealSql);
                   requestIdMemo.push(requestId);
                   intervalReqIdMemo.push(intervalReqId);
                   return true;
                 }
                 else {
-                  const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${intervalReqId}, ${requestId}, ${chosenLocationId});`;
+                  const requestIdUserId = await database.query(`select * from request where id =${requestId};`)[0].user_id;
+                  const intervalReqIdUserId = await database.query(`select * from request where id =${intervalReqId};`)[0].user_id;
+                  const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${intervalReqIdUserId}, ${requestIdUserId}, ${chosenLocationId});`;
                   await database.query(mealSql);
                   requestIdMemo.push(requestId);
                   intervalReqIdMemo.push(intervalReqId);
