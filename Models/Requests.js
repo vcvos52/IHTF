@@ -5,11 +5,12 @@ const Users = require('./Users');
 class Requests {
   static async addRequest(type, kerberos, locations, date, intervals) {
     // TODO: check if there is outstanding request by same user at same time
+    // 
     const userId = await Users.getId(kerberos);
     const insert = `insert into request (user_id, type) values (${userId}, '${type}');`;
     const response = await database.query(insert);
     const sqlGetRequestID = `select id from request where user_id=${userId} and type='${type}';`;
-    const requestId = sqlGetRequestId[0].id;
+    const requestId = sqlGetRequestID[0].id;
     intervals.forEach(async function(interval) {
       const startTime = date+interval[0]+":00";
       const endTime = date+interval[1]+":00";
@@ -17,6 +18,7 @@ class Requests {
       await database.query(insertInterval);
     });
     locations.forEach(async function(location) {
+
       const diningHallId = getDiningId(location);
       const insertLocation = `insert into location (request_id, dining_hall_id), values (${requestId}, ${diningHallId});`;
       await database.query(insertLocation);
@@ -119,3 +121,5 @@ class Requests {
     }
   }
 }
+
+module.exports = Requests;

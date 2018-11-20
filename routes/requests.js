@@ -12,12 +12,17 @@ const Requests = require('../Models/Requests.js');
 /**
  * Donate
  * Creates a donate request for a user
- * @name POST/api/requests/donate/:user
+ * @name POST/api/requests/donate
  * @param {String} - user name
  * @returns {Request} - the request created
 */
-router.post('/donate/:user', async (req, res) => {
-    let user = req.param.user;
+router.post('/donate', async (req, res) => {
+    let kerberos = req.session.name;
+    let diningHalls = req.body.diningHalls;
+    let intervals = req.body.hours;
+    let date = req.body.date;
+    await Requests.addRequest("host", kerberos, diningHalls, date, intervals);
+    res.status(201).json("Donation request added").end();
 
 });
 
@@ -25,13 +30,17 @@ router.post('/donate/:user', async (req, res) => {
 /**
  * Receive
  * Creates a receive request for a user
- * @name POST/api/requests/receive/:user
+ * @name POST/api/requests/receive
  * @param {String} - user name
  * @returns {Request} - the request created
 */
-router.post('/receive/:user', async (req, res) => {
-    let user = req.param.user;
-
+router.post('/receive', async (req, res) => {
+    let kerberos = req.session.name;
+    let diningHalls = req.body.diningHalls;
+    let intervals = req.body.hours;
+    let date = req.body.date;
+    await Requests.addRequest("guest", kerberos, diningHalls, date, intervals);
+    res.status(201).json("Reception request added").end();
 });
 
 
