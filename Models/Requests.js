@@ -13,16 +13,15 @@ class Requests {
     const s = await database.query(sqlGetRequestID);
     const requestID = s[0].id;
     intervals.forEach(async function(interval) {
-      const startTime = date+ " " + interval[0]+":00";
-      const endTime = date + " " + interval[1]+":00";
-      console.log("HHHHHHHHHH", endTime);
-      const insertInterval = `insert into interval (request_id, start_time, end_time) values ('${requestID}', '${startTime}', '${endTime}');`;
-      await database.query(insertInterval);
+      let startTime = interval[0];
+      let endTime = interval[1];
+      await database.query('INSERT INTO interval (request_id, start_time, end_time) VALUES (?, ?, ?);', [requestID, startTime, endTime]);
+      database.query(insertInterval);
     });
     locations.forEach(async function(location) {
 
       const diningHallId = await Requests.getDiningId(location);
-      const insertLocation = `insert into location (request_id, dining_hall_id), values (${requestID}, ${diningHallId});`;
+      const insertLocation = `insert into 'location' ('request_id', 'dining_hall_id'), values (${requestID}, ${diningHallId});`;
       await database.query(insertLocation);
     });
     return await Requests.match(requestID);
@@ -58,15 +57,16 @@ class Requests {
     const response = await database.query(requestQuery);
     const user = response[0].user_id;
     const type = response[0].type;
-    const intervalsReq = `select * from interval where request_id=${requestId};`;
-    const locationsReq = `select * from location where request_id=${requestId};`;
+    const intervalsReq = `select * from interval where request_id='${requestId}';`;
+    const locationsReq = `select * from location where request_id='${requestId}';`;
 
     const allIntervals = `select * from interval where not(request_id=${requestId});`;
 
     let chosenDate = "";
     let chosenLocationId = -1;
     const narrowedRequests = [];
-    intervalsReq.forEach(async function(intervalReq) {
+    let i  = await database.query(intervalsReq);
+    i.forEach(async function(intervalReq) {
       intervalAlls.forEach(async function(interval) {
         const reqStartTime = new Date(intervalReq.start_time);
         const reqEndTime = new Date(intervalReq.end_time);
