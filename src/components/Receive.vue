@@ -1,26 +1,40 @@
 <template>
-    <b-row>
-        <b-col></b-col>
-        <b-col lg='6' id="receive">
-            <b-form class="component" @submit.prevent="receiveRequest">
-                <h4> Receive a Meal! </h4>
-                <p> Select the dining halls at which you could meet your match <br> (ctrl-select to select multiple):</p>
-                <b-form-select multiple :select-size="4" v-model="diningHalls" :options="diningOptions" class="preset" />
-                <p> Select the date:</p>
-                <b-form-input v-model="date" type="date" class="date"/>
-                <p> Select the times in which you can receive <br> (ctrl-select to select multiple):</p>
-                <b-form-select multiple :select-size="4" v-model="hours" :options="hourOptions" class="multi-select"/>
-                <b-button type="submit" class="button">Submit</b-button>
-            </b-form>
-            <div v-if='success' class="success-message">
-                {{ success }}
-            </div>
-            <div v-if='error' class="error-message">
-                <b> {{error}} </b>
-            </div>
-        </b-col>
-        <b-col></b-col>
-    </b-row>
+  <b-row>
+    <b-col></b-col>
+    <b-col lg="6" id="receive">
+      <b-form class="component" @submit.prevent="receiveRequest">
+        <h4>Receive a Meal!</h4>
+        <p>Select the dining halls at which you could meet your match
+          <br>(ctrl-select to select multiple):
+        </p>
+        <b-form-select
+          multiple
+          :select-size="4"
+          v-model="diningHalls"
+          :options="diningOptions"
+          class="preset"
+        />
+        <p>Select the date:</p>
+        <b-form-input v-model="date" type="date" class="date"/>
+        <p>Select the times in which you can receive
+          <br>(ctrl-select to select multiple):
+        </p>
+        <b-form-select
+          multiple
+          :select-size="4"
+          v-model="hours"
+          :options="hourOptions"
+          class="multi-select"
+        />
+        <b-button type="submit" class="button">Submit</b-button>
+      </b-form>
+      <div v-if="success" class="success-message">{{ success }}</div>
+      <div v-if="error" class="error-message">
+        <b>{{error}}</b>
+      </div>
+    </b-col>
+    <b-col></b-col>
+  </b-row>
 </template>
 
 
@@ -73,6 +87,7 @@ export default {
         .post("/api/requests/receive/", bodyContent)
         .then(res => {
           this.success = "Receive request made";
+          eventBus.$emit("refresh-requests");
           eventBus.$emit("update-action", "choice");
           alert(res.data);
         })

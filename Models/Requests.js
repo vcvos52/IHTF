@@ -6,10 +6,8 @@ class Requests {
   static async addRequest(type, kerberos, locations, date, intervals) {
     // TODO: check if there is outstanding request by same user at same time
     const userId = await Users.getId(kerberos);
-    console.log("THE USER ID CURRENTLY USED IS ", userId);
     const insert = `insert into request (user_id, type) values (${userId}, '${type}');`;
     const response = await database.query(insert);
-    console.log("THE RESPONSE RECEIVED IS: ", response);
     const sqlGetRequestID = `select id from request where user_id=${userId} and type='${type}';`;
     const s = await database.query(sqlGetRequestID);
     const requestID = s[s.length - 1].id;
@@ -87,6 +85,7 @@ class Requests {
         // get type of request for this interval that is not of the request to be matched
         const sqlType = `select * from \`request\` where \`id\`=${intervalReqId} and \`type\` != '${type}';`;
         const responseType = await database.query(sqlType);
+<<<<<<< HEAD
 
         // get locations for this interval that is not of the request to be matched
         const sqlLocationsFromSelected = `select * from \`location\` where \`request_id\`=${intervalReqId};`;
@@ -99,12 +98,18 @@ class Requests {
               if (locationReq.dining_hall_id == locationSelect.dining_hall_id) {
                 // found a matching interval and a matching location
 
+=======
+        const sqlLocationsFromSelected = `select * from \`location\` where \`request_id\`=${intervalReqId};`;
+        const locationsFromSelected = await database.query(sqlLocationsFromSelected);
+        if (reqStartTime <= intervalEndTime && reqStartTime >= intervalStartTime && responseType != undefined && responseType.length > 0 && (!requestIdMemo.includes(requestId) || !intervalReqIdMemo.includes(intervalReqId))) {
+          locationsReq.forEach(async function (locationReq) {
+            locationsFromSelected.forEach(async function (locationSelect) {
+              if (locationReq.dining_hall_id == locationSelect.dining_hall_id) {
+>>>>>>> origin/vue-components
                 chosenDate = intervalReq.start_time;
                 chosenLocationId = locationReq.dining_hall_id;
-                console.log("chosen date", chosenDate);
                 if (type == 'host') {
                   const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${user}, ${responseType[0].user_id}, ${chosenLocationId});`;
-                  console.log(mealSql);
                   await database.query(mealSql);
 
                   // clear requests
@@ -113,7 +118,6 @@ class Requests {
                 }
                 else {
                   const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${responseType[0].user_id}, ${user}, ${chosenLocationId});`;
-                  console.log(mealSql);
                   await database.query(mealSql);
 
                   // clear requests
@@ -125,18 +129,21 @@ class Requests {
           }
         }
         else if (reqEndTime <= intervalEndTime && reqEndTime >= intervalStartTime && responseType != undefined && responseType.length > 0 && (!requestIdMemo.includes(requestId) || !intervalReqIdMemo.includes(intervalReqId))) {
+<<<<<<< HEAD
           console.log("FOUND VALID TIME");
           for (var locationReq in locationsReq) {
             for (var locationSelect in locationsFromSelected) {
               console.log("request location: ", locationReq.dining_hall_id);
               console.log("current selected request location: ", locationSelect.dining_hall_id);
+=======
+          locationsReq.forEach(async function (locationReq) {
+            locationsFromSelected.forEach(async function (locationSelect) {
+>>>>>>> origin/vue-components
               if (locationReq.dining_hall_id == locationSelect.dining_hall_id) {
                 chosenDate = intervalReq.end_time;
                 chosenLocationId = locationReq.dining_hall_id;
-                console.log("chosen date", chosenDate);
                 if (type == 'host') {
                   const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${user}, ${responseType[0].user_id}, ${chosenLocationId});`;
-                  console.log(mealSql);
                   await database.query(mealSql);
 
                   // clear requests
@@ -146,7 +153,6 @@ class Requests {
                 }
                 else {
                   const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${responseType[0].user_id}, ${user}, ${chosenLocationId});`;
-                  console.log(mealSql);
                   await database.query(mealSql);
 
                   // clear requests
