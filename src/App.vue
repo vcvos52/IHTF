@@ -1,10 +1,8 @@
 <template>
   <b-container fluid id="app">
     <b-row :no-gutters="true" id="nav">
-      <b-col lg="12"> 
-      <h2 @click='goHome' id="home-button">
-          Welcome to I Have This Food!
-      </h2>
+      <b-col lg="12">
+        <h2 @click="goHome" id="home-button">Welcome to I Have This Food!</h2>
       </b-col>
     </b-row>
 
@@ -26,22 +24,20 @@
       </b-col>
       <b-col lg="4" id="right">
         <Meals></Meals>
-      </b-col> 
+      </b-col>
     </b-row>
     <b-row v-if="logged === true">
       <b-col/>
       <b-col lg="1">
         <button class="button" id="signout" @click="logout">Log Out</button>
-        <div v-if='error' class="error-message">
-            <b> {{error}} </b>
+        <div v-if="error" class="error-message">
+          <b>{{error}}</b>
         </div>
       </b-col>
       <b-col/>
     </b-row>
     <b-row>
-      <b-col id="copyrights">
-        Made by Surf the High C's
-      </b-col>
+      <b-col id="copyrights">Made by Surf the High C's</b-col>
     </b-row>
   </b-container>
 </template>

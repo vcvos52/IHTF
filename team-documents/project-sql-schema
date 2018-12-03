@@ -1,0 +1,48 @@
+CREATE TABLE `dining_hall` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `name` varchar(256) NOT NULL,
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1
+
+CREATE TABLE `location` (
+ `request_id` int(11) NOT NULL,
+ `dining_hall_id` int(11) NOT NULL,
+ PRIMARY KEY (`request_id`,`dining_hall_id`),
+ KEY `dining_hall_location` (`dining_hall_id`),
+ CONSTRAINT `dining_hall_location` FOREIGN KEY (`dining_hall_id`) REFERENCES `dining_hall` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+ CONSTRAINT `request_id_location` FOREIGN KEY (`request_id`) REFERENCES `request` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
+
+CREATE TABLE `interval` (
+ `request_id` int(11) NOT NULL,
+ `start_time` varchar(200) NOT NULL,
+ `end_time` varchar(200) NOT NULL,
+ PRIMARY KEY (`request_id`,`start_time`,`end_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
+
+CREATE TABLE `meal` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `time` datetime NOT NULL,
+ `host_id` int(11) NOT NULL,
+ `guest_id` int(11) NOT NULL,
+ `dining_hall_id` int(11) NOT NULL,
+ PRIMARY KEY (`id`),
+ KEY `host_id` (`host_id`,`guest_id`),
+ KEY `dining_hall_id` (`dining_hall_id`),
+ KEY `guest_id` (`guest_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1
+
+CREATE TABLE `request` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `user_id` int(11) NOT NULL,
+ `type` enum('host','guest') NOT NULL,
+ PRIMARY KEY (`id`),
+ KEY `user_id` (`user_id`),
+ CONSTRAINT `user_id_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1
+
+CREATE TABLE `user` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `kerberos` varchar(256) NOT NULL,
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1

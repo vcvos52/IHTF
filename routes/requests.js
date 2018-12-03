@@ -1,5 +1,5 @@
 
-let session = require("express-session");
+// let session = require("express-session");
 
 const express = require('express');
 
@@ -40,7 +40,7 @@ router.post('/receive', async (req, res) => {
     let intervals = req.body.hours;
     let date = req.body.date;
     await Requests.addRequest("guest", kerberos, diningHalls, date, intervals);
-    res.status(201).json("Reception request added").end();
+    res.status(201).json("Receive request added. Check Upcoming Meals to see if you were matched").end();
 });
 
 

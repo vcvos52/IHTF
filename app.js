@@ -23,5 +23,12 @@ app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/requests', requestsRouter);
 
+app.get("*", function (req, res) {
+    res
+        .status(404)
+        .json(
+            "It looks like you got lost! Make sure not to add any extension to the URL and try again"
+        );
+});
 
 module.exports = app;
