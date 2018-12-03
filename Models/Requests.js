@@ -98,12 +98,7 @@ class Requests {
                   await database.query(mealSql);
 
                   // clear requests
-                  await database.query(`delete * from \`request\` where id=${requestId};`);
-                  await database.query(`delete * from \`request\` where id=${intervalReqId};`);
-                  await database.query(`delete * from \`interval\` where request_id=${requestId};`);
-                  await database.query(`delete * from \`interval\` where request_id=${intervalReqId};`);
-                  await database.query(`delete * from \`location\` where request_id=${requestId};`);
-                  await database.query(`delete * from \`location\` where request_id=${intervalReqId};`);
+                  clearRequests(requestId, currentIntervalId);
                   break outermost;
                 }
                 else {
@@ -111,12 +106,7 @@ class Requests {
                   await database.query(mealSql);
 
                   // clear requests
-                  await database.query(`delete * from request where id=${requestId};`);
-                  await database.query(`delete * from request where id=${intervalReqId};`);
-                  await database.query(`delete * from interval where request_id=${requestId};`);
-                  await database.query(`delete * from interval where request_id=${intervalReqId};`);
-                  await database.query(`delete * from location where request_id=${requestId};`);
-                  await database.query(`delete * from location where request_id=${intervalReqId};`);
+                  clearRequests(requestId, currentIntervalId);
                   break outermost;
                 }
               }
@@ -134,12 +124,8 @@ class Requests {
                   await database.query(mealSql);
 
                   // clear requests
-                  await database.query(`delete * from request where id=${requestId};`);
-                  await database.query(`delete * from request where id=${intervalReqId};`);
-                  await database.query(`delete * from interval where request_id=${requestId};`);
-                  await database.query(`delete * from interval where request_id=${intervalReqId};`);
-                  await database.query(`delete * from location where request_id=${requestId};`);
-                  await database.query(`delete * from location where request_id=${intervalReqId};`);
+                  clearRequests(requestId, currentIntervalId);
+
                   break outermost;
                 }
                 else {
@@ -147,12 +133,7 @@ class Requests {
                   await database.query(mealSql);
 
                   // clear requests
-                  await database.query(`delete * from request where id=${requestId};`);
-                  await database.query(`delete * from request where id=${intervalReqId};`);
-                  await database.query(`delete * from interval where request_id=${requestId};`);
-                  await database.query(`delete * from interval where request_id=${intervalReqId};`);
-                  await database.query(`delete * from location where request_id=${requestId};`);
-                  await database.query(`delete * from location where request_id=${intervalReqId};`);
+                  clearRequests(requestId, currentIntervalId);
                   break outermost;
                 }
               }
@@ -165,6 +146,15 @@ class Requests {
       }
     }
     return false;
+  }
+
+  static async clearRequests(requestId, currentIntervalId) {
+    await database.query(`delete * from request where id=${requestId};`);
+    await database.query(`delete * from request where id=${currentIntervalId};`);
+    await database.query(`delete * from interval where request_id=${requestId};`);
+    await database.query(`delete * from interval where request_id=${currentIntervalId};`);
+    await database.query(`delete * from location where request_id=${requestId};`);
+    await database.query(`delete * from location where request_id=${currentIntervalId};`);
   }
 }
 
