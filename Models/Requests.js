@@ -85,12 +85,18 @@ class Requests {
         // get type of request for this interval that is not of the request to be matched
         const sqlType = `select * from \`request\` where \`id\`=${intervalReqId} and \`type\` != '${type}';`;
         const responseType = await database.query(sqlType);
+
+        // get locations for this interval that is not of the request to be matched
         const sqlLocationsFromSelected = `select * from \`location\` where \`request_id\`=${intervalReqId};`;
         const locationsFromSelected = await database.query(sqlLocationsFromSelected);
-        if (reqStartTime <= intervalEndTime && reqStartTime >= intervalStartTime && responseType != undefined && responseType.length > 0 && (!requestIdMemo.includes(requestId) || !intervalReqIdMemo.includes(intervalReqId))) {
-          locationsReq.forEach(async function (locationReq) {
-            locationsFromSelected.forEach(async function (locationSelect) {
+
+        if (reqStartTime <= intervalEndTime && reqStartTime >= intervalStartTime && responseType != undefined && responseType.length > 0) {
+          console.log("FOUND VALID TIME");
+          for (var locationReq in locationsReq) {
+            for (var locationSelect in locationsFromSelected) {
               if (locationReq.dining_hall_id == locationSelect.dining_hall_id) {
+                // found a matching interval and a matching location
+
                 chosenDate = intervalReq.start_time;
                 chosenLocationId = locationReq.dining_hall_id;
                 if (type == 'host') {
@@ -114,8 +120,11 @@ class Requests {
           }
         }
         else if (reqEndTime <= intervalEndTime && reqEndTime >= intervalStartTime && responseType != undefined && responseType.length > 0 && (!requestIdMemo.includes(requestId) || !intervalReqIdMemo.includes(intervalReqId))) {
-          locationsReq.forEach(async function (locationReq) {
-            locationsFromSelected.forEach(async function (locationSelect) {
+          console.log("FOUND VALID TIME");
+          for (var locationReq in locationsReq) {
+            for (var locationSelect in locationsFromSelected) {
+              console.log("request location: ", locationReq.dining_hall_id);
+              console.log("current selected request location: ", locationSelect.dining_hall_id);
               if (locationReq.dining_hall_id == locationSelect.dining_hall_id) {
                 chosenDate = intervalReq.end_time;
                 chosenLocationId = locationReq.dining_hall_id;
