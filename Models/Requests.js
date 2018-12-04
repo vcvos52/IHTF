@@ -132,6 +132,34 @@ class Requests {
     });
     return false;
   }
+
+  /**
+   * Deletes a request given its id
+   * @param {int} id 
+   * @return true if successful, false otherwise
+   */
+  static async deleteRequest(id) {
+    const sql = `DELETE FROM request WHERE id = ${id}`
+    let response = await database.query(sql);
+    if (response !== undefined) {
+      return true;
+    }
+    return false
+  }
+
+  /**
+   * Deletes a request given its id
+   * @param {int} id 
+   * @return true if successful, false otherwise
+   */
+  static async deleteMeal(id) {
+    const sql = `DELETE FROM meal WHERE id = ${id}`
+    let response = await database.query(sql);
+    if (response !== undefined) {
+      return true;
+    }
+    return false
+  }
 }
 
 module.exports = Requests;

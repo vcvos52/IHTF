@@ -67,7 +67,7 @@ router.get('/matches', async (req, res) => {
         return;
     }
     if (req.session.name !== kerberos) {
-        res.status(403).json("You do not have permission to edit this freet.").end();
+        res.status(403).json("You do not have permission.").end();
         return;
     }
     let matchData = await shapeDateForMatch(matches, req);
@@ -96,7 +96,7 @@ router.get('/requests', async (req, res) => {
         return;
     }
     if (req.session.name !== kerberos) {
-        res.status(403).json("You do not have permission to edit this freet.").end();
+        res.status(403).json("You do not have permission.").end();
         return;
     }
     let requestsData = await shapeDataForRequest(requests, req);
@@ -126,7 +126,7 @@ async function shapeDateForMatch(matches, req) {
         newRow.day = row.time.toDateString();
         newRow.time = row.time.toLocaleTimeString();
         newRow.diningHall = await Requests.getDiningName(row.dining_hall_id);
-        newRow.id = row.id;
+        newRow.id = parseInt(row.id);
         data.push(newRow);
     }
     return data;
@@ -148,7 +148,7 @@ async function shapeDataForRequest(requests) {
         // initiating row if not already initialized in data
         if (!(requestId in data)) {
             data[requestId] = {}
-            data[requestId].id = requestId;
+            data[requestId].id = parseInt(requestId);
             data[requestId].intervals = []
             data[requestId].diningHalls = []
             data[requestId].day = row.start_time.substring(0, 11)
