@@ -107,8 +107,6 @@ export default {
     axios.get('/api/requests/getAction')
         .then((res) => {
             this.currentAction = res.data;
-            console.log(this.currentAction);
-            console.log("HHHHHHHHHHHHHH");
         })
         .catch(res => {
             this.currentAction = 'choice';

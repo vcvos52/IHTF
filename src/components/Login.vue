@@ -5,7 +5,7 @@
             
             <div class="short-answer">
                 <label for="kerberos"> Kerberos: </label>
-                <input id="kerberos" v-model="kerberos" type="text" name="kerberos">
+                <input id="kerberos" v-model="kerberos" type="text" name="kerberos" required>
             </div>
             
             <input type="submit" value="Login" class="button">
@@ -46,6 +46,7 @@ export default {
         })
         .catch(err => {
           this.error = err.response.data;
+          console.log(err);
         });
     }
   }
