@@ -79,6 +79,7 @@ export default {
   created: function() {
     eventBus.$on("update-action", res => {
       this.currentAction = res;
+      axios.post(`/api/requests/setAction/${res}`)
     });
     eventBus.$on("login-action", () => {
       this.logged = true;
@@ -86,11 +87,40 @@ export default {
     eventBus.$on("logout-action", () => {
       this.logged = false;
     });
+
+    /**
+     * Checks if the user is currently signed in
+     * This decided what HTML elements to render
+     */
+    axios.get('/api/users/isSignedIn')
+        .then(() => {
+            this.logged = true;
+        })
+        .catch(res => {
+            this.isSignedIn = false;
+        });
+    
+    /**
+     * Checks if the user is currently signed in
+     * This decided what HTML elements to render
+     */
+    axios.get('/api/requests/getAction')
+        .then((res) => {
+            this.currentAction = res.data;
+            console.log(this.currentAction);
+            console.log("HHHHHHHHHHHHHH");
+        })
+        .catch(res => {
+            this.currentAction = 'choice';
+        });
+
   },
 
   methods: {
     goHome: function() {
-      this.currentAction = "choice";
+      var choice = "choice";
+      this.currentAction = choice;
+      axios.post(`/api/requests/setAction/${choice}`)
     },
 
     logout: function() {
