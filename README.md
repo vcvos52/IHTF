@@ -12,19 +12,18 @@ The MPV will contain a working version of the app and will allow most features t
 
 The implementation goals for the MVP, as discussed in the meeting, were:
 ○  Delete fulfilled requests → Husayn
-○  Cancel requests → Giulio
+○  Cancel requests → Giulio: Completed
 ○  URL catching → Giulio: Completed
 ○  Matching algorithm - important to get a basic matching → Husayin
 ○  Make it secure (bicrypt, escaping, and DOMPurify(), no csurf yet) → Vince
-○  Sessions → Vincenzo 
+○  Sessions → Vincenzo: Completed
 ○  OpenID Connect → Kostas/Giulio
 
 Bugs fix:
 ○  Matching to multiple requests
-○  Hours in ‘Upcoming Meals’ are off by timezone
+○  Hours in ‘Upcoming Meals’ are off by timezone: Completed
 ○  Datetime in database instead of string
-○  Sessions
-○  Alice name not appearing in Upcoming meals
+○  Alice name not appearing in Upcoming meals: Completed
 
 ## File ownership
 Models/ -> mostly Husayn, some addition Giulio
