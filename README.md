@@ -11,18 +11,18 @@ The proof of concept will contain a simplified version of the app and will allow
 The MPV will contain a working version of the app and will allow most features to be present, with the exception of notifications, csurf security, user 'donated meals' counter, customized hours of operation (per different dining hall), and thorough testing.
 
 The implementation goals for the MVP, as discussed in the meeting, were:
-○  Delete fulfilled requests → Husayn
-○  Cancel requests → Giulio: Completed
-○  URL catching → Giulio: Completed
-○  Matching algorithm - important to get a basic matching → Husayin
-○  Make it secure (bicrypt, escaping, and DOMPurify(), no csurf yet) → Vince
-○  Sessions → Vincenzo: Completed
-○  OpenID Connect → Kostas/Giulio
+○  Delete fulfilled requests: Completed
+○  Cancel requests and meals: Completed
+○  URL catching: Completed
+○  Matching algorithm - important to get a basic matching: Completed
+○  Make it secure (escaping, and DOMPurify(), no csurf yet): Completed
+○  Sessions: Completed
+○  OpenID Connect → WIP
 
 Bugs fix:
-○  Matching to multiple requests
+○  Matching to multiple requests: Completed
 ○  Hours in ‘Upcoming Meals’ are off by timezone: Completed
-○  Datetime in database instead of string
+○  Datetime in database instead of string: WIP
 ○  Alice name not appearing in Upcoming meals: Completed
 
 ## File ownership
