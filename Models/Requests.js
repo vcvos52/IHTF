@@ -51,6 +51,7 @@ class Requests {
   }
 
   static async match(requestId) {
+    console.log("request id: ", requestId);
     const requestQuery = `select * from request where id=${requestId};`;
     const response = await database.query(requestQuery);
     const user = response[0].user_id;
@@ -60,20 +61,18 @@ class Requests {
     const intervalsReq = await database.query(`select * from \`interval\` where \`request_id\`=${requestId};`);
     const locationsReq = await database.query(`select * from \`location\` where \`request_id\`=${requestId};`);
 
-    // all intervals in the request table (could also filter on not the same type)
-    const allIntervals = await database.query(`select * from \`interval\` where \`request_id\` <> ${requestId};`);
-
+    // all intervals in the request table that are different than the current request (could also filter on not the same type)
+    const allIntervals = await database.query(`select * from \`interval\` where \`request_id\` != ${requestId};`);
+    console.log("all intervals not of the request id: ", allIntervals);
 
     let chosenDate = "";
     let chosenLocationId = -1;
     const narrowedRequests = [];
-    const requestIdMemo = [];
-    const intervalReqIdMemo = [];
 
     // first go through all intervals of the request and see if any other interval matches
     outermost:
-    for (var intervalReq in intervalsReq) {
-      for (var interval in allIntervals) {
+    for (let intervalReq of intervalsReq) {
+      for (let interval of allIntervals) {
         const reqStartTime = new Date(intervalReq.start_time);
         const reqEndTime = new Date(intervalReq.end_time);
         const intervalStartTime = new Date(interval.start_time);
@@ -81,19 +80,22 @@ class Requests {
 
         // get request_id of current interval that is not of the request to be matched
         const intervalReqId = interval.request_id;
+        console.log("interval: ", interval);
 
         // get type of request for this interval that is not of the request to be matched
-        const sqlType = `select * from \`request\` where \`id\`=${intervalReqId} and \`type\` != '${type}';`;
-        const responseType = await database.query(sqlType);
+        const sqlType = `select * from \`request\` where \`id\`=${intervalReqId} and \`type\` != '${type}';`; // this really should be named intervalType
+        const responseType = await database.query(sqlType); // this should be named intervalTypeResponse
+        console.log("response type", responseType);
 
         // get locations for this interval that is not of the request to be matched
         const sqlLocationsFromSelected = `select * from \`location\` where \`request_id\`=${intervalReqId};`;
         const locationsFromSelected = await database.query(sqlLocationsFromSelected);
 
-        if (reqStartTime <= intervalEndTime && reqStartTime >= intervalStartTime && responseType != undefined && responseType.length > 0) {
+        // do we need to check responseType.length > 0?
+        if (reqStartTime <= intervalEndTime && reqStartTime >= intervalStartTime && responseType != undefined && responseType.length>0) {
           console.log("FOUND VALID TIME");
-          for (var locationReq in locationsReq) {
-            for (var locationSelect in locationsFromSelected) {
+          for (let locationReq of locationsReq) {
+            for (let locationSelect of locationsFromSelected) {
               if (locationReq.dining_hall_id == locationSelect.dining_hall_id) {
                 // found a matching interval and a matching location
 
@@ -104,7 +106,7 @@ class Requests {
                   await database.query(mealSql);
 
                   // clear requests
-                  clearRequests(requestId, currentIntervalId);
+                  Requests.clearRequests(requestId, intervalReqId);
                   break outermost;
                 }
                 else {
@@ -112,19 +114,18 @@ class Requests {
                   await database.query(mealSql);
 
                   // clear requests
-                  clearRequests(requestId, currentIntervalId);
+                  Requests.clearRequests(requestId, intervalReqId);
                   break outermost;
                 }
               }
             }
           }
         }
-        else if (reqEndTime <= intervalEndTime && reqEndTime >= intervalStartTime && responseType != undefined && responseType.length > 0 && (!requestIdMemo.includes(requestId) || !intervalReqIdMemo.includes(intervalReqId))) {
+        else if (reqEndTime <= intervalEndTime && reqEndTime >= intervalStartTime && responseType != undefined && responseType.length>0) {
           console.log("FOUND VALID TIME");
-          for (var locationReq in locationsReq) {
-            for (var locationSelect in locationsFromSelected) {
-              console.log("request location: ", locationReq.dining_hall_id);
-              console.log("current selected request location: ", locationSelect.dining_hall_id);
+          for (let locationReq of locationsReq) {
+            for (let locationSelect of locationsFromSelected) {
+
               if (locationReq.dining_hall_id == locationSelect.dining_hall_id) {
                 chosenDate = intervalReq.end_time;
                 chosenLocationId = locationReq.dining_hall_id;
@@ -133,7 +134,7 @@ class Requests {
                   await database.query(mealSql);
 
                   // clear requests
-                  clearRequests(requestId, currentIntervalId);
+                  Requests.clearRequests(requestId, intervalReqId);
 
                   break outermost;
                 }
@@ -142,7 +143,7 @@ class Requests {
                   await database.query(mealSql);
 
                   // clear requests
-                  clearRequests(requestId, currentIntervalId);
+                  Requests.clearRequests(requestId, intervalReqId);
                   break outermost;
                 }
               }
@@ -158,12 +159,12 @@ class Requests {
   }
 
   static async clearRequests(requestId, currentIntervalId) {
-    await database.query(`delete * from request where id=${requestId};`);
-    await database.query(`delete * from request where id=${currentIntervalId};`);
-    await database.query(`delete * from interval where request_id=${requestId};`);
-    await database.query(`delete * from interval where request_id=${currentIntervalId};`);
-    await database.query(`delete * from location where request_id=${requestId};`);
-    await database.query(`delete * from location where request_id=${currentIntervalId};`);
+    await database.query(`delete from \`request\` where \`id\` =${requestId};`);
+    await database.query(`delete from \`request\` where \`id\` =${currentIntervalId};`);
+    await database.query(`delete from \`interval\` where \`request_id\` =${requestId};`);
+    await database.query(`delete from \`interval\` where \`request_id\` =${currentIntervalId};`);
+    await database.query(`delete from \`location\` where \`request_id\` =${requestId};`);
+    await database.query(`delete from \`location\` where \`request_id\` =${currentIntervalId};`);
   }
 }
 
