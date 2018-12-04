@@ -94,9 +94,10 @@ class Requests {
         // do we need to check responseType.length > 0?
         if (reqStartTime <= intervalEndTime && reqStartTime >= intervalStartTime && responseType != undefined && responseType.length>0) {
           console.log("FOUND VALID TIME");
+          const currentIntervalUserId = responseType[0].user_id;
           for (let locationReq of locationsReq) {
             for (let locationSelect of locationsFromSelected) {
-              if (locationReq.dining_hall_id == locationSelect.dining_hall_id) {
+              if (locationReq.dining_hall_id == locationSelect.dining_hall_id && user != currentIntervalUserId) {
                 // found a matching interval and a matching location
 
                 chosenDate = intervalReq.start_time;
@@ -123,10 +124,11 @@ class Requests {
         }
         else if (reqEndTime <= intervalEndTime && reqEndTime >= intervalStartTime && responseType != undefined && responseType.length>0) {
           console.log("FOUND VALID TIME");
+          const currentIntervalUserId = responseType[0].user_id;
           for (let locationReq of locationsReq) {
             for (let locationSelect of locationsFromSelected) {
 
-              if (locationReq.dining_hall_id == locationSelect.dining_hall_id) {
+              if (locationReq.dining_hall_id == locationSelect.dining_hall_id && currentIntervalUserId) {
                 chosenDate = intervalReq.end_time;
                 chosenLocationId = locationReq.dining_hall_id;
                 if (type == 'host') {
