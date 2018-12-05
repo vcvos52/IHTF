@@ -43,6 +43,35 @@ router.post('/receive', async (req, res) => {
     res.status(201).json("Receive request added. Check Upcoming Meals to see if you were matched").end();
 });
 
+/**
+ * Delete a request
+ * Deletes a request previously made by a user
+ * @name DELETE/api/request/deleteRequest
+ * @param {int} request id
+ */
+router.delete('/deleteRequest/:id', async (req, res) => {
+    let response = await Requests.deleteRequest(req.params.id);
+    if (response) {
+        res.status(201).json("Request successfully deleted").end();
+    } else {
+        res.status(404).json("There was no request with this id").end();
+    }
+})
+
+/**
+ * Delete a request
+ * Deletes a request previously made by a user
+ * @name DELETE/api/request/deleteRequest
+ * @param {int} request id
+ */
+router.delete('/deleteMeal/:id', async (req, res) => {
+    let response = await Requests.deleteMeal(req.params.id);
+    if (response) {
+        res.status(201).json("Meal successfully deleted").end();
+    } else {
+        res.status(404).json("There was no request with this id").end();
+    }
+})
 
 
 /**

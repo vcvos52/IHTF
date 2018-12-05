@@ -47,6 +47,11 @@
           </b-card>
         </b-col>
       </b-row>
+      <b-row>
+        <div v-if="error" class="error-message">
+          <b>{{error}}</b>
+        </div>
+      </b-row>
     </b-col>
   </b-row>
 </template>
@@ -63,6 +68,7 @@ export default {
 
   data() {
     return {
+      error: "",
       meals: [],
       requests: []
     };
@@ -88,10 +94,28 @@ export default {
         .then();
     },
     deleteMeal(id) {
-      console.log(id);
+      this.error = "";
+      axios
+        .delete(`/api/requests/deleteMeal/` + id)
+        .then(res => {
+          alert(res.data);
+          this.loadMeals();
+        })
+        .catch(err => {
+          this.error = err.response.data.error;
+        });
     },
     deleteRequest(id) {
-      console.log(id);
+      this.error = "";
+      axios
+        .delete(`/api/requests/deleteRequest/` + id)
+        .then(res => {
+          alert(res.data);
+          this.loadRequests();
+        })
+        .catch(err => {
+          this.error = err.response.data.error;
+        });
     }
   },
 

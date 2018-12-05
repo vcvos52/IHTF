@@ -128,7 +128,7 @@ class Requests {
           for (let locationReq of locationsReq) {
             for (let locationSelect of locationsFromSelected) {
 
-              if (locationReq.dining_hall_id == locationSelect.dining_hall_id && currentIntervalUserId) {
+              if (locationReq.dining_hall_id == locationSelect.dining_hall_id && user!=currentIntervalUserId) {
                 chosenDate = intervalReq.end_time;
                 chosenLocationId = locationReq.dining_hall_id;
                 if (type == 'host') {
@@ -158,6 +158,34 @@ class Requests {
       }
     }
     return false;
+  }
+
+  /**
+   * Deletes a request given its id
+   * @param {int} id
+   * @return true if successful, false otherwise
+   */
+  static async deleteRequest(id) {
+    const sql = `DELETE FROM request WHERE id = ${id}`
+    let response = await database.query(sql);
+    if (response !== undefined) {
+      return true;
+    }
+    return false
+  }
+
+  /**
+   * Deletes a request given its id
+   * @param {int} id
+   * @return true if successful, false otherwise
+   */
+  static async deleteMeal(id) {
+    const sql = `DELETE FROM meal WHERE id = ${id}`
+    let response = await database.query(sql);
+    if (response !== undefined) {
+      return true;
+    }
+    return false
   }
 
   static async clearRequests(requestId, currentIntervalId) {
