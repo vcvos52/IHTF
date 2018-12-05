@@ -3,8 +3,6 @@ const router = express.Router();
 const axios = require('axios');
 const queryString = require('query-string');
 
-
-
 /**
  * Catches redirection from /autorize and parse code and state
  * After parsing, proceeds with authentications as stated in 
@@ -88,8 +86,7 @@ router.get("/", async (req, res) => {
 
                 // Step 6: Sign in the app!
                 req.session.name = kerberos;
-                res.redirect("http://localhost:3000");
-
+                res.redirect("/");
             })
             .catch(err => {
                 res.status(403).json(err).end();
@@ -98,14 +95,6 @@ router.get("/", async (req, res) => {
         .catch(err => {
             res.status(403).json(err).end();
         });
-})
-
-router.get('/session', async (req, res) => {
-    if (req.session.name === undefined) {
-        res.status(200).json("false").end()
-    } else {
-        res.status(200).json("true").end()
-    }
 })
 
 module.exports = router;

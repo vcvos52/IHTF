@@ -90,11 +90,11 @@ export default {
   },
 
   mounted: async function() {
-    // checks if user has logged in
+    // checks if user has logged in via OpenId Connect
     await axios
-      .get("/logging/session")
+      .get("/api/users/session")
       .then(res => {
-        if (res.data === true) {
+        if (res.status === 200) {
           this.logged = true;
         } else {
           this.logged = false;

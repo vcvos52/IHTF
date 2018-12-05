@@ -1,15 +1,23 @@
-let session = require("express-session");
-
 const express = require('express');
-
 const router = express.Router();
-
-const axios = require('axios');
 
 const Users = require('../Models/Users.js')
 const Requests = require('../Models/Requests')
 
-
+/**
+ * Checks if user has logged in via OpenId connect by checking the session
+ * If the user has, it then checks if the user exists in the db and, if not,
+ * it creates an entry for the user
+ * @name GET/api/users/session
+ * @throws {403} - if user has not logged in yet
+ */
+router.get('/session', async (req, res) => {
+    if (req.session.name === undefined) {
+        res.status(403).json("User not logged in yet").end()
+    } else {
+        res.status(200).json("Used logged in correctly").end()
+    }
+})
 
 /**
  * Authenticate
@@ -29,7 +37,6 @@ router.post('/:user', async (req, res) => {
     }
     req.session.name = kerberos;
     res.status(201).json(kerberos).end();
-
 });
 
 /**
@@ -72,7 +79,6 @@ router.get('/matches', async (req, res) => {
     }
     let matchData = await shapeDateForMatch(matches, req);
     res.status(201).json(matchData).end();
-
 });
 
 /**
