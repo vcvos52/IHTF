@@ -10,6 +10,8 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 // Handles User api requests
 const requestsRouter = require('./routes/requests');
+// Handles Open id connect route
+const openIdRouter = require('./routes/openidconnect');
 
 const app = express();
 app.use(session({ secret: "6170", resave: true, saveUninitialized: true }));
@@ -22,6 +24,7 @@ app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/requests', requestsRouter);
+app.use("/logging", openIdRouter);
 
 app.get("*", function (req, res) {
     res

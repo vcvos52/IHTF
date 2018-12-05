@@ -4,8 +4,8 @@ const router = express.Router();
 
 
 /* GET home page. */
-router.get('/:*', function(req, res) {
-  res.render('index', { title: 'Fritter'});
+router.get('/:*', function (req, res) {
+  res.render('index', { title: 'IHTF' });
 });
 
 module.exports = router;
