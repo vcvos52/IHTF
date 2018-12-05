@@ -183,4 +183,19 @@ async function shapeDataForRequest(requests) {
     return data;
 }
 
+
+/**
+ * Check if user is signed into an account
+ * @name GET/api/users/isSignedIn
+ * @returns {200} success message
+ * @throws {401} - if user is not logged in
+*/
+router.get('/isSignedIn', async (req, res) => {
+    if (!req.session.name){
+        res.status(401).json("You are not signed in").end();
+        return;
+    }
+    res.status(200).json("You are signed in").end();
+});
+
 module.exports = router;

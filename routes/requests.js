@@ -73,4 +73,36 @@ router.delete('/deleteMeal/:id', async (req, res) => {
     }
 })
 
+
+/**
+ * Check if user is signed into an account
+ * @name GET/api/users/isSignedIn
+ * @returns {200} success message
+ * @throws {401} - if user is not logged in
+*/
+router.get('/getAction', async (req, res) => {
+    if (!req.session.action){
+        res.status(400).json("No action chosen").end();
+        return;
+    }
+    else if (req.session.action === 'donate'){
+        res.status(200).json("donate").end();
+    }
+    else if (req.session.action === 'receive'){
+        res.status(200).json("receive").end();
+    }
+});
+
+
+/**
+ * Check if user is signed into an account
+ * @name GET/api/users/isSignedIn
+ * @returns {200} success message
+ * @throws {401} - if user is not logged in
+*/
+router.post('/setAction/:action', async (req, res) => {
+    req.session.action = req.params.action;
+    res.status(200).end();
+});
+
 module.exports = router;
