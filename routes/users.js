@@ -12,7 +12,7 @@ const Requests = require('../Models/Requests')
  * @throws {403} - if user has not logged in yet
  */
 router.get('/session', async (req, res) => {
-    if (req.session.name === undefined) {
+    if (req.session.name === undefined | req.session.name === null) {
         res.status(403).json("User not logged in yet").end()
     } else {
         if (!(await Users.userExists(req.session.name))) {
