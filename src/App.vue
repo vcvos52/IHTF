@@ -80,7 +80,7 @@ export default {
   created: async function() {
     eventBus.$on("update-action", res => {
       this.currentAction = res;
-      axios.post(`/api/requests/setAction/${res}`)
+      axios.post(`/api/requests/setAction/${res}`);
     });
     eventBus.$on("login-action", () => {
       this.logged = true;
@@ -93,26 +93,27 @@ export default {
      * Checks if the user is currently signed in
      * This decided what HTML elements to render
      */
-    axios.get('/api/users/isSignedIn')
-        .then(() => {
-            this.logged = true;
-        })
-        .catch(res => {
-            this.isSignedIn = false;
-        });
-    
+    axios
+      .get("/api/users/isSignedIn")
+      .then(() => {
+        this.logged = true;
+      })
+      .catch(res => {
+        this.isSignedIn = false;
+      });
+
     /**
      * Checks if the user is currently signed in
      * This decided what HTML elements to render
      */
-    axios.get('/api/requests/getAction')
-        .then((res) => {
-            this.currentAction = res.data;
-        })
-        .catch(res => {
-            this.currentAction = 'choice';
-        });
-
+    axios
+      .get("/api/requests/getAction")
+      .then(res => {
+        this.currentAction = res.data;
+      })
+      .catch(res => {
+        this.currentAction = "choice";
+      });
   },
 
   mounted: async function() {
@@ -135,7 +136,7 @@ export default {
     goHome: function() {
       var choice = "choice";
       this.currentAction = choice;
-      axios.post(`/api/requests/setAction/${choice}`)
+      axios.post(`/api/requests/setAction/${choice}`);
     },
 
     logout: function() {
@@ -204,6 +205,7 @@ input {
 #signout {
   margin-top: 50px;
   margin-bottom: 50px;
+  font-size: 80%;
 }
 
 #signout:hover {

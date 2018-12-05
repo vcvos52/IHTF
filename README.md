@@ -38,8 +38,9 @@ server.js, database.js, app.js -> all
 ihtf.herokuapp.com
 
 ## Project setup locally
-npm install
-change `test` variables in routes/openidconnect.js and src/components/Login.vue to `true`!
+1. npm install
+2. change `test` variables in routes/openidconnect.js and src/components/Login.vue to `true`
+3. in MIT OpenID Connect Website, sign in on self-service client registration with credentials and set Redirect URI(s) solely to: http://127.0.0.1:3000/logging
 ### Compiles and minifies for production
 npm run build
 npm start

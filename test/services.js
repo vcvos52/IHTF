@@ -16,26 +16,25 @@ async function signin(user) {
  * @param {String} user
  */
 async function getMatches(user) {
-    return requestApp
-      .get(`/api/users/matches/`);
-  }
+  return requestApp
+    .get(`/api/users/matches/`);
+}
 
 /**
  * @param {String} user
  */
 async function makeRequests(data) {
-    console.log("in make request", data);
-    return requestApp
-      .post('/api/requests/receive/', data);
+  return requestApp
+    .post('/api/requests/receive/', data);
 }
 
-  /**
- * @param {String} user
- */
+/**
+* @param {String} user
+*/
 async function makeDonation(data) {
-    return requestApp
-      .post(`/api/requests/donate/`, data);
-  }
+  return requestApp
+    .post(`/api/requests/donate/`, data);
+}
 
 module.exports = {
   signin,

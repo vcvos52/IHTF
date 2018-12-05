@@ -11,7 +11,7 @@ const queryString = require('query-string');
  * Eventually sets the session for the authenticated kerberos and redirects to ihtf
  */
 router.get("/", async (req, res) => {
-    let test = true // change when deploying!
+    let test = false // change when deploying!
     let redirect_url;
 
     // getting code, state from req
@@ -23,7 +23,7 @@ router.get("/", async (req, res) => {
     let client_secret =
         "AJakB9Zn_Tosrn306Op1flIZ0vBCweBdbkFq5V7g4OjIbnEZ2aa0d21voitKYSBHyAEdmT_WMiAL5kvZnUcLQc4";
 
-    if (test === true) {
+    if (test) {
         redirect_url = "http://127.0.0.1:3000/logging";
     } else {
         redirect_url = "https://ihtf.herokuapp.com/logging";

@@ -3,7 +3,7 @@
     <form class="component" v-on:submit.prevent="login" method="post">
       <h4>Login with your Kerberos or Certificates!</h4>
 
-      <input type="submit" value="Login" class="button">
+      <input type="submit" value="Login" class="button" id="logging-button">
       <div v-if="success" class="success-message">
         <b>{{success}}</b>
       </div>
@@ -26,7 +26,7 @@ export default {
 
   data() {
     return {
-      test: true,
+      test: false,
       success: "",
       error: "",
       kerberos: "",
@@ -41,7 +41,7 @@ export default {
       this.success = "";
       this.error = "";
 
-      if (this.test === true) {
+      if (this.test) {
         this.redirect_url = "redirect_url=http://127.0.0.1:3000/logging";
       } else {
         this.redirect_url = "redirect_url=https://ihtf.herokuapp.com/logging";
@@ -93,5 +93,9 @@ export default {
 
 h4 {
   font-size: 120%;
+}
+
+#logging-button {
+  font-family: "Pacifico", cursive;
 }
 </style>
