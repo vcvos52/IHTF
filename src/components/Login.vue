@@ -27,6 +27,7 @@ export default {
 
   data() {
     return {
+      test: true,
       success: "",
       error: "",
       kerberos: "",
@@ -40,11 +41,17 @@ export default {
       // resetting variables
       this.success = "";
       this.error = "";
+
+      if (this.test === true) {
+        this.redirect_url = "redirect_url=http://127.0.0.1:3000/logging";
+      } else {
+        this.redirect_url = "redirect_url=https://ihtf.herokuapp.com/logging";
+      }
+
       // OpenID Connect
       // Step 1: Redirecting to Authorize
       let response_type = "response_type=code";
       let scope = "scope=openid%20email";
-      let redirect_url = "redirect_url=http://127.0.0.1:3000/logging"; //https%3A%2F%2Fihtf.herokuapp.com localhost%3A3000
       let state = "state=g5afc5n89"; //used to mitigate csrf or xsrf attacks
       let queryParams =
         "?client_id=" +
@@ -54,7 +61,7 @@ export default {
         "&" +
         scope +
         "&" +
-        redirect_url +
+        this.redirect_url +
         "&" +
         state;
       // redirecting

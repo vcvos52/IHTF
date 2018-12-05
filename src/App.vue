@@ -75,8 +75,9 @@ export default {
   },
 
   // adds the reactive aspect to the app. Every time the currentAction changes,
-  // the app will change (read by this eventBus)
-  created: function() {
+  // the app will change (read by this eventBus). Makes an initial axios call
+  // to session to see if authentication was confirmed.
+  created: async function() {
     eventBus.$on("update-action", res => {
       this.currentAction = res;
     });
@@ -86,6 +87,22 @@ export default {
     eventBus.$on("logout-action", () => {
       this.logged = false;
     });
+  },
+
+  mounted: async function() {
+    // checks if user has logged in
+    await axios
+      .get("/logging/session")
+      .then(res => {
+        if (res.data === true) {
+          this.logged = true;
+        } else {
+          this.logged = false;
+        }
+      })
+      .catch(err => {
+        this.error = err;
+      });
   },
 
   methods: {
