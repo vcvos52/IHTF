@@ -8,26 +8,28 @@ IHTF, or I Have This Food, is a web application that allows MIT students with ex
 The proof of concept will contain a simplified version of the app and will allow for logging in and out, creating donating and receiving requests, and a rudimentary matching algorithm.
 
 ## MVP
-The MPV will contain a working version of the app and will allow most features to be present, with the exception of notifications, csurf security, user 'donated meals' counter, customized hours of operation (per different dining hall), and thorough testing.
+The MPV will contain a working version of the app and will allow most features to be present, with the exception of notifications, user 'donated meals' counter, customized hours of operation (per different dining hall), and thorough testing.
 
 The implementation goals for the MVP, as discussed in the meeting, were:
 ○  Delete fulfilled requests: Completed
 ○  Cancel requests and meals: Completed
 ○  URL catching: Completed
 ○  Matching algorithm - important to get a basic matching: Completed
-○  Make it secure (escaping, and DOMPurify(), no csurf yet): Completed
+○  Make it secure (escaping, no thorough csrf yet): Completed
 ○  Sessions: Completed
-○  OpenID Connect → WIP
+○  OpenID Connect: Completed
 
 Bugs fix:
 ○  Matching to multiple requests: Completed
 ○  Hours in ‘Upcoming Meals’ are off by timezone: Completed
-○  Datetime in database instead of string: WIP
 ○  Alice name not appearing in Upcoming meals: Completed
+○  Self Matching: Completed
+
+OpenID Connect: provides security against CSRF and XSRF because of request parameter 'state' passed into token request. See 2.1.1.1 in https://openid.net/specs/openid-connect-basic-1_0.html
 
 ## File ownership
 Models/ -> mostly Husayn, some addition Giulio
-routes/ -> mostly Vince, some addition Giulio
+routes/ -> mostly Vince, some additions by Giulio and Kostas for OpenID Connect
 test/ -> Vince
 src/ -> Kostas and Giulio (equally)
 server.js, database.js, app.js -> all
@@ -37,10 +39,10 @@ ihtf.herokuapp.com
 
 ## Project setup locally
 npm install
-### Compiles and hot-reloads for development
-npm run serve
+change `test` variables in routes/openidconnect.js and src/components/Login.vue to `true`!
 ### Compiles and minifies for production
 npm run build
+npm start
 ### Run your tests
 npm run test
 ### Lints and fixes files

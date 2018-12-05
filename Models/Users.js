@@ -2,6 +2,19 @@ const database = require('../database');
 
 class Users {
   /**
+   * Adds user to database user
+   * @param {string} kerberos 
+   * @return {boolean} true if action completed successfully, false otherwise
+   */
+  static async addUser(kerberos) {
+    const sql = `insert into user (kerberos) VALUES ("${kerberos}")`
+    const response = await database.query(sql);
+    if (response !== undefined) {
+      return true;
+    }
+    return false;
+  }
+  /**
    * checks whether kerberos 'kerberos' exists in user table
    * @param  {string}  kerberos kerberos string to check
    * @return {boolean} true if kerberos exists in user table, false if not

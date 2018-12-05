@@ -15,6 +15,12 @@ router.get('/session', async (req, res) => {
     if (req.session.name === undefined) {
         res.status(403).json("User not logged in yet").end()
     } else {
+        if (!(await Users.userExists(req.session.name))) {
+            response = await Users.addUser(req.session.name);
+            if (!response) {
+                res.status(500).json("Error in adding kerberos to db").end()
+            }
+        }
         res.status(200).json("Used logged in correctly").end()
     }
 })
