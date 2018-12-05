@@ -186,6 +186,7 @@ class Requests {
       return true;
     }
     return false
+  }
 
   static async clearRequests(requestId, currentIntervalId) {
     await database.query(`delete from \`request\` where \`id\` =${requestId};`);
