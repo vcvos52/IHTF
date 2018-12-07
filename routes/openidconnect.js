@@ -11,7 +11,7 @@ const queryString = require('query-string');
  * Eventually sets the session for the authenticated kerberos and redirects to ihtf
  */
 router.get("/", async (req, res) => {
-    let test = false // change when deploying!
+    let test = true // change when deploying!
     let redirect_url;
 
     // getting code, state from req
