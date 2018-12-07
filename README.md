@@ -8,7 +8,7 @@ IHTF, or I Have This Food, is a web application that allows MIT students with ex
 The proof of concept will contain a simplified version of the app and will allow for logging in and out, creating donating and receiving requests, and a rudimentary matching algorithm.
 
 ## MVP
-The MPV will contain a working version of the app and will allow most features to be present, with the exception of notifications, user 'donated meals' counter, customized hours of operation (per different dining hall), and thorough testing.
+The MVP will contain a working version of the app and will allow most features to be present, with the exception of notifications, user 'donated meals' counter, customized hours of operation (per different dining hall), and thorough testing.
 
 The implementation goals for the MVP, as discussed in the meeting, were:
 ○  Delete fulfilled requests: Completed
