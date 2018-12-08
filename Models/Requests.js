@@ -22,7 +22,8 @@ class Requests {
       const insertLocation = `insert into \`location\`(\`request_id\`, \`dining_hall_id\`) VALUES (${requestID}, ${diningHallId});`;
       await database.query(insertLocation);
     });
-    return await Requests.match(requestID);
+    await Requests.match(requestID);
+    return
   }
 
   static async requestExists(kerberos, type) {
@@ -190,6 +191,9 @@ class Requests {
    */
   static async deleteMeal(id) {
     const sql = `DELETE FROM meal WHERE id = ${id}`
+    // send notification of deletion
+    await Users.sendNotificationForCancelation(id);
+    // delete
     let response = await database.query(sql);
     if (response !== undefined) {
       return true;

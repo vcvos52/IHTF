@@ -5,8 +5,6 @@ const express = require('express');
 
 const router = express.Router();
 
-const axios = require('axios');
-
 const Requests = require('../Models/Requests.js');
 
 /**
@@ -81,14 +79,14 @@ router.delete('/deleteMeal/:id', async (req, res) => {
  * @throws {401} - if user is not logged in
 */
 router.get('/getAction', async (req, res) => {
-    if (!req.session.action){
+    if (!req.session.action) {
         res.status(400).json("No action chosen").end();
         return;
     }
-    else if (req.session.action === 'donate'){
+    else if (req.session.action === 'donate') {
         res.status(200).json("donate").end();
     }
-    else if (req.session.action === 'receive'){
+    else if (req.session.action === 'receive') {
         res.status(200).json("receive").end();
     }
 });
