@@ -1,4 +1,13 @@
 const database = require('../database');
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: "ihtfoodmit@gmail.com",
+    pass: 'fixsoftware'
+  }
+})
 
 class Users {
   /**
@@ -111,6 +120,42 @@ class Users {
         return 2
       }
     }
+  }
+
+  /**
+   * Sends notification for match to users who have been matched
+   * @param {string} firstUser 
+   * @param {string} secondUser
+   * @param {string} date
+   * @param {string} diningHallId
+   * @return true if email is successful, false otherwise
+   */
+  static async sendNotificationForMatch(firstUser, secondUser, date, diningHallId) {
+    let hostResponse = await database.query(`select kerberos from user where id = ${firstUser}`)
+    let hostKerberos = hostResponse[0].kerberos
+    let guestResponse = await database.query(`select kerberos from user where id = ${secondUser}`)
+    let guestKerberos = guestResponse[0].kerberos
+    let diningHallResponse = await database.query(`select name from dining_hall where id = ${diningHallId}`)
+    let chosenDiningHall = diningHallResponse[0].name
+    let subjectText = "IHTF: You have been matched!"
+    let emailText = "<p>Hey " + hostKerberos + ", <br> <br> You have been matched to dine with " + guestKerberos + " on " +
+      date + " in " + chosenDiningHall + ". <br> Enjoy! <br> <br> I Have This Food Team</p>";
+
+    let fullData = {
+      from: "ihtfoodmit@gmail.com",
+      to: hostKerberos + "@mit.edu",
+      subject: subjectText,
+      html: emailText
+    }
+
+    transporter.sendMail(fullData, function (error, response) {
+      if (error) {
+        console.log(JSON.stringify(error))
+        return false;
+      } else {
+        return true;
+      };
+    })
   }
 }
 

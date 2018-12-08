@@ -51,7 +51,6 @@ class Requests {
   }
 
   static async match(requestId) {
-    console.log("request id: ", requestId);
     const requestQuery = `select * from request where id=${requestId};`;
     const response = await database.query(requestQuery);
     const user = response[0].user_id;
@@ -63,11 +62,9 @@ class Requests {
 
     // all intervals in the request table that are different than the current request (could also filter on not the same type)
     const allIntervals = await database.query(`select * from \`interval\` where \`request_id\` != ${requestId};`);
-    console.log("all intervals not of the request id: ", allIntervals);
 
     let chosenDate = "";
     let chosenLocationId = -1;
-    const narrowedRequests = [];
 
     // first go through all intervals of the request and see if any other interval matches
     outermost:
@@ -80,20 +77,17 @@ class Requests {
 
         // get request_id of current interval that is not of the request to be matched
         const intervalReqId = interval.request_id;
-        console.log("interval: ", interval);
 
         // get type of request for this interval that is not of the request to be matched
         const sqlType = `select * from \`request\` where \`id\`=${intervalReqId} and \`type\` != '${type}';`; // this really should be named intervalType
         const responseType = await database.query(sqlType); // this should be named intervalTypeResponse
-        console.log("response type", responseType);
 
         // get locations for this interval that is not of the request to be matched
         const sqlLocationsFromSelected = `select * from \`location\` where \`request_id\`=${intervalReqId};`;
         const locationsFromSelected = await database.query(sqlLocationsFromSelected);
 
         // do we need to check responseType.length > 0?
-        if (reqStartTime <= intervalEndTime && reqStartTime >= intervalStartTime && responseType != undefined && responseType.length>0) {
-          console.log("FOUND VALID TIME");
+        if (reqStartTime <= intervalEndTime && reqStartTime >= intervalStartTime && responseType != undefined && responseType.length > 0) {
           const currentIntervalUserId = responseType[0].user_id;
           for (let locationReq of locationsReq) {
             for (let locationSelect of locationsFromSelected) {
@@ -106,6 +100,10 @@ class Requests {
                   const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${user}, ${responseType[0].user_id}, ${chosenLocationId});`;
                   await database.query(mealSql);
 
+                  // sending email to host
+                  Users.sendNotificationForMatch(user, responseType[0].user_id, chosenDate, chosenLocationId);
+                  Users.sendNotificationForMatch(responseType[0].user_id, user, chosenDate, chosenLocationId);
+
                   // clear requests
                   Requests.clearRequests(requestId, intervalReqId);
                   break outermost;
@@ -113,6 +111,10 @@ class Requests {
                 else {
                   const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${responseType[0].user_id}, ${user}, ${chosenLocationId});`;
                   await database.query(mealSql);
+
+                  // sending email to host
+                  Users.sendNotificationForMatch(user, responseType[0].user_id, chosenDate, chosenLocationId);
+                  Users.sendNotificationForMatch(responseType[0].user_id, user, chosenDate, chosenLocationId);
 
                   // clear requests
                   Requests.clearRequests(requestId, intervalReqId);
@@ -122,18 +124,21 @@ class Requests {
             }
           }
         }
-        else if (reqEndTime <= intervalEndTime && reqEndTime >= intervalStartTime && responseType != undefined && responseType.length>0) {
-          console.log("FOUND VALID TIME");
+        else if (reqEndTime <= intervalEndTime && reqEndTime >= intervalStartTime && responseType != undefined && responseType.length > 0) {
           const currentIntervalUserId = responseType[0].user_id;
           for (let locationReq of locationsReq) {
             for (let locationSelect of locationsFromSelected) {
 
-              if (locationReq.dining_hall_id == locationSelect.dining_hall_id && user!=currentIntervalUserId) {
+              if (locationReq.dining_hall_id == locationSelect.dining_hall_id && user != currentIntervalUserId) {
                 chosenDate = intervalReq.end_time;
                 chosenLocationId = locationReq.dining_hall_id;
                 if (type == 'host') {
                   const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${user}, ${responseType[0].user_id}, ${chosenLocationId});`;
                   await database.query(mealSql);
+
+                  // sending email to host
+                  Users.sendNotificationForMatch(user, responseType[0].user_id, chosenDate, chosenLocationId);
+                  Users.sendNotificationForMatch(responseType[0].user_id, user, chosenDate, chosenLocationId);
 
                   // clear requests
                   Requests.clearRequests(requestId, intervalReqId);
@@ -143,6 +148,10 @@ class Requests {
                 else {
                   const mealSql = `insert into \`meal\` (\`time\`, \`host_id\`, \`guest_id\`, \`dining_hall_id\`) values ('${chosenDate}', ${responseType[0].user_id}, ${user}, ${chosenLocationId});`;
                   await database.query(mealSql);
+
+                  // sending email to host
+                  Users.sendNotificationForMatch(user, responseType[0].user_id, chosenDate, chosenLocationId);
+                  Users.sendNotificationForMatch(responseType[0].user_id, user, chosenDate, chosenLocationId);
 
                   // clear requests
                   Requests.clearRequests(requestId, intervalReqId);

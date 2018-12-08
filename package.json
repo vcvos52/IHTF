@@ -27,6 +27,8 @@
     "jest-cli": "^23.6.0",
     "morgan": "^1.9.1",
     "mysql": "^2.16.0",
+    "node-mandrill": "^1.0.1",
+    "nodemailer": "^4.7.0",
     "query-string": "^6.2.0",
     "serve-static": "^1.13.2",
     "supertest-session": "^3.3.0",
