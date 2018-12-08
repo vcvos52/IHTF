@@ -1,8 +1,11 @@
 <template>
   <b-container fluid id="app">
     <b-row :no-gutters="true" id="nav">
-      <b-col lg="12">
+      <b-col lg="11">
         <h2 @click="goHome" id="home-button">Welcome to I Have This Food!</h2>
+      </b-col>
+      <b-col v-if="logged===true" id="signout">
+        <button class="button" id="signout-button" @click="logout">Log Out</button>
       </b-col>
     </b-row>
 
@@ -29,7 +32,6 @@
     <b-row v-if="logged === true">
       <b-col/>
       <b-col lg="1">
-        <button class="button" id="signout" @click="logout">Log Out</button>
         <div v-if="error" class="error-message">
           <b>{{error}}</b>
         </div>
@@ -203,12 +205,22 @@ input {
 }
 
 #signout {
-  margin-top: 50px;
-  margin-bottom: 50px;
-  font-size: 80%;
+  background-color: #f1b101;
+  border-left: 2px solid #ffebaf;
+  font-size: 100%;
+  margin-top: 0;
+  padding: 0;
+  text-align: center;
 }
 
-#signout:hover {
+#signout-button {
+  border: 0;
+  margin-top: 14px;
+  margin-right: 5px;
+}
+
+#signout:hover,
+#signout-button:hover {
   cursor: pointer;
   background-color: #ffbb00;
 }
