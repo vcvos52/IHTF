@@ -75,6 +75,13 @@ export default {
     this.sucess = "";
   },
 
+  mounted: function() {
+    if (this.test) {
+      this.kerberos = "test1";
+      eventBus.$emit("login-action");
+    }
+  },
+
   updated: function() {
     this.error = "";
     this.sucess = "";
