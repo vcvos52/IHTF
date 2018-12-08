@@ -26,7 +26,7 @@ export default {
 
   data() {
     return {
-      test: true,
+      test: false,
       success: "",
       error: "",
       kerberos: "",
@@ -35,51 +35,61 @@ export default {
   },
 
   methods: {
-    //OpenID Connect login
+    //OpenID Connect login if not testing mode
     login: async function() {
-      // resetting variables
-      this.success = "";
-      this.error = "";
-
+      // if testing is on (no openID connect)
       if (this.test) {
-        this.redirect_url = "redirect_url=http://127.0.0.1:3000/logging";
-      } else {
-        this.redirect_url = "redirect_url=https://ihtf.herokuapp.com/logging";
-      }
+        let testKerberos = "test1";
+        axios
+          .post("/api/users/" + testKerberos)
+          .then(res => {
+            if (res.status === 201) {
+              eventBus.$emit("login-action");
+            }
+          })
+          .catch(err => {
+            this.error = err;
+          });
 
-      // OpenID Connect
-      // Step 1: Redirecting to Authorize
-      let response_type = "response_type=code";
-      let scope = "scope=openid%20email";
-      let state = "state=g5afc5n89"; //used to mitigate csrf or xsrf attacks
-      let queryParams =
-        "?client_id=" +
-        this.client_id +
-        "&" +
-        response_type +
-        "&" +
-        scope +
-        "&" +
-        this.redirect_url +
-        "&" +
-        state;
-      // redirecting
-      window.location = "https://oidc.mit.edu/authorize" + queryParams;
-      this.success = "Redirecting... this may take a second";
-      // Rest of the magic happens in openidconnect.js after successful autentication
+        // if testing is not on --> openID connect
+      } else {
+        // resetting variables
+        this.success = "";
+        this.error = "";
+
+        if (this.test) {
+          this.redirect_url = "redirect_url=http://127.0.0.1:3000/logging";
+        } else {
+          this.redirect_url = "redirect_url=https://ihtf.herokuapp.com/logging";
+        }
+
+        // OpenID Connect
+        // Step 1: Redirecting to Authorize
+        let response_type = "response_type=code";
+        let scope = "scope=openid%20email";
+        let state = "state=g5afc5n89"; //used to mitigate csrf or xsrf attacks
+        let queryParams =
+          "?client_id=" +
+          this.client_id +
+          "&" +
+          response_type +
+          "&" +
+          scope +
+          "&" +
+          this.redirect_url +
+          "&" +
+          state;
+        // redirecting
+        window.location = "https://oidc.mit.edu/authorize" + queryParams;
+        this.success = "Redirecting... this may take a second";
+        // Rest of the magic happens in openidconnect.js after successful autentication
+      }
     }
   },
 
   created: function() {
     this.error = "";
     this.sucess = "";
-  },
-
-  mounted: function() {
-    if (this.test) {
-      this.kerberos = "test1";
-      eventBus.$emit("login-action");
-    }
   },
 
   updated: function() {

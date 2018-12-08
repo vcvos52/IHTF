@@ -54,7 +54,7 @@ ihtf.herokuapp.com
 
 ## Project setup locally
 1. npm install
-2. change `test` variables in routes/openidconnect.js and src/components/Login.vue to `true`. There are two tests account, with kerberos `test1` and `test2` - in order to switch among the two, change this.kerberos in the `mounted` function of Login.vue
+2. change `test` variables in routes/openidconnect.js, src/components/Login.vue, and App.vue to `true`. There are two tests account, with kerberos `test1` and `test2` - in order to switch among the two, change this.kerberos in the `login` function of Login.vue
 3. in MIT OpenID Connect Website, sign in on self-service client registration with credentials and set Redirect URI(s) solely to: http://127.0.0.1:3000/logging
 (whenever done with testing, make sure to reset the Redirect URI(s) to https://ihtf.herokuapp.com/logging) or else it will not work on heroku anymore.
 4. npm run build

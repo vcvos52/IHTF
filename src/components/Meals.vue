@@ -39,11 +39,11 @@
             </button>
             Request type: {{request.type}}
             <br>
-            Dining Halls: {{request.diningHalls}}
+            Dining Halls: {{request.diningHalls.join(", ")}}
             <br>
             Day: {{request.day}}
             <br>
-            Times: {{request.intervals}}!
+            Times: {{request.intervals.join(", ")}}
           </b-card>
         </b-col>
       </b-row>
@@ -129,7 +129,7 @@ export default {
     }
   },
 
-  created: function() {
+  mounted: function() {
     this.loadMeals();
     this.loadRequests();
     setInterval(() => {

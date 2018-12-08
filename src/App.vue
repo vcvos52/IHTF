@@ -34,15 +34,9 @@
         <Meals></Meals>
       </b-col>
     </b-row>
-    <b-row v-if="logged === true">
-      <b-col/>
-      <b-col lg="1">
-        <div v-if="error" class="error-message">
-          <b>{{error}}</b>
-        </div>
-      </b-col>
-      <b-col/>
-    </b-row>
+    <div v-if="error" class="error-message">
+      <b>{{error}}</b>
+    </div>
     <b-row>
       <b-col id="copyrights">Made by Surf the High C's</b-col>
     </b-row>
@@ -75,6 +69,7 @@ export default {
 
   data() {
     return {
+      test: true,
       currentAction: "choice",
       logged: false,
       error: ""
@@ -135,7 +130,7 @@ export default {
         }
       })
       .catch(err => {
-        this.error = err;
+        console.log(error);
       });
   },
 
@@ -231,11 +226,13 @@ input {
 }
 
 .success-message {
+  font-family: "EB Garamond", serif;
   padding: 30px;
   color: green;
 }
 
 .error-message {
+  font-family: "EB Garamond", serif;
   padding: 30px;
   color: red;
 }
@@ -250,6 +247,7 @@ input {
   padding-left: 50px;
   padding-right: 50px;
   border-right: 1px solid black;
+  margin-bottom: 70px;
 }
 
 #right {
