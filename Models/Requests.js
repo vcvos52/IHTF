@@ -1,4 +1,5 @@
 const database = require('../database');
+const schedule = require('node-schedule');
 
 const Users = require('./Users');
 
@@ -209,6 +210,14 @@ class Requests {
     await database.query(`delete from \`location\` where \`request_id\` =${requestId};`);
     await database.query(`delete from \`location\` where \`request_id\` =${currentIntervalId};`);
   }
+
+  static async clearStaleRequests() {
+    await database.query(`DELETE FROM \`request\` WHERE \`id\` IN (SELECT \`request_id\` FROM \`interval\` WHERE end_time < '${new Date(new Date().toISOString().slice(0, 19).replace('T', ' '))}')`)
+  }
 }
+
+schedule.scheduleJob("0 0 * * *", () => {
+    await clearStaleRequests();
+});
 
 module.exports = Requests;
