@@ -73,7 +73,7 @@ class Users {
   static async getMatches(kerberos) {
     const id = await Users.getId(kerberos);
     if (id) {
-      const sql = `select * from meal where host_id=${id} or guest_id=${id}`
+      const sql = `select * from meal where host_id=${id} or guest_id=${id} and time >= '${new Date().toISOString().slice(0, 19).replace('T', ' ')}';`
       const response = await database.query(sql);
       if (response[0] !== undefined) {
         return response;
