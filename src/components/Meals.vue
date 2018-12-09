@@ -39,11 +39,11 @@
             </button>
             Request type: {{request.type}}
             <br>
-            Dining Halls: {{request.diningHalls}}
+            Dining Halls: {{request.diningHalls.join(", ")}}
             <br>
             Day: {{request.day}}
             <br>
-            Times: {{request.intervals}}!
+            Times: {{request.intervals.join(", ")}}
           </b-card>
         </b-col>
       </b-row>
@@ -79,19 +79,29 @@ export default {
       axios
         .get(`/api/users/matches`)
         .then(res => {
-          this.meals = res.data;
+          if (res.data === "This user is not matched.") {
+            this.meals = [];
+          } else {
+            this.meals = res.data;
+          }
         })
-        .catch()
-        .then();
+        .catch(err => {
+          this.err = err.response.data.error;
+        });
     },
     loadRequests() {
       axios
         .get(`/api/users/requests`)
         .then(res => {
-          this.requests = res.data;
+          if (res.data === "This user does not have any requests.") {
+            this.requests = [];
+          } else {
+            this.requests = res.data;
+          }
         })
-        .catch()
-        .then();
+        .catch(err => {
+          this.err = err.response.data.error;
+        });
     },
     deleteMeal(id) {
       this.error = "";
@@ -119,7 +129,7 @@ export default {
     }
   },
 
-  created: function() {
+  mounted: function() {
     this.loadMeals();
     this.loadRequests();
     setInterval(() => {

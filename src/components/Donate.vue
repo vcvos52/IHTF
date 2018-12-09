@@ -88,9 +88,9 @@ export default {
         .post("/api/requests/donate/", bodyContent)
         .then(res => {
           this.success = "Donation request made";
-          eventBus.$emit("refresh-requests");
           eventBus.$emit("update-action", "choice");
           alert(res.data);
+          eventBus.$emit("refresh-requests");
         })
         .catch(err => {
           this.error = err.response;

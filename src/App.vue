@@ -1,7 +1,15 @@
 <template>
   <b-container fluid id="app">
-    <b-row :no-gutters="true" id="nav">
-      <b-col lg="12">
+    <b-row :no-gutters="true" id="nav" v-if="logged===true">
+      <b-col lg="11">
+        <h2 @click="goHome" id="home-button">Welcome to I Have This Food!</h2>
+      </b-col>
+      <b-col lg="1">
+        <button class="button" id="signout-button" @click="logout">Log Out</button>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col :no-gutters="true" id="nav" lg="12" v-if="logged===false">
         <h2 @click="goHome" id="home-button">Welcome to I Have This Food!</h2>
       </b-col>
     </b-row>
@@ -26,16 +34,9 @@
         <Meals></Meals>
       </b-col>
     </b-row>
-    <b-row v-if="logged === true">
-      <b-col/>
-      <b-col lg="1">
-        <button class="button" id="signout" @click="logout">Log Out</button>
-        <div v-if="error" class="error-message">
-          <b>{{error}}</b>
-        </div>
-      </b-col>
-      <b-col/>
-    </b-row>
+    <div v-if="error" class="error-message">
+      <b>{{error}}</b>
+    </div>
     <b-row>
       <b-col id="copyrights">Made by Surf the High C's</b-col>
     </b-row>
@@ -68,6 +69,7 @@ export default {
 
   data() {
     return {
+      test: true,
       currentAction: "choice",
       logged: false,
       error: ""
@@ -128,7 +130,7 @@ export default {
         }
       })
       .catch(err => {
-        this.error = err;
+        console.log(error);
       });
   },
 
@@ -203,22 +205,34 @@ input {
 }
 
 #signout {
-  margin-top: 50px;
-  margin-bottom: 50px;
-  font-size: 80%;
+  background-color: #f1b101;
+  font-size: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
 }
 
-#signout:hover {
+#signout-button {
+  border: 0;
+  border-left: 2px solid #ffebaf;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+#signout-button:hover {
   cursor: pointer;
   background-color: #ffbb00;
 }
 
 .success-message {
+  font-family: "EB Garamond", serif;
   padding: 30px;
   color: green;
 }
 
 .error-message {
+  font-family: "EB Garamond", serif;
   padding: 30px;
   color: red;
 }
@@ -233,6 +247,7 @@ input {
   padding-left: 50px;
   padding-right: 50px;
   border-right: 1px solid black;
+  margin-bottom: 70px;
 }
 
 #right {

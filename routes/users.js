@@ -74,13 +74,13 @@ router.get('/matches', async (req, res) => {
         res.status(403).json("This is not a valid user.").end();
         return;
     }
-    let matches = await Users.getMatches(kerberos);
-    if (!(matches)) {
-        res.status(404).json("This user is not matched.").end();
-        return;
-    }
     if (req.session.name !== kerberos) {
         res.status(403).json("You do not have permission.").end();
+        return;
+    }
+    let matches = await Users.getMatches(kerberos);
+    if (!(matches)) {
+        res.status(200).json("This user is not matched.").end();
         return;
     }
     let matchData = await shapeDateForMatch(matches, req);
@@ -102,13 +102,13 @@ router.get('/requests', async (req, res) => {
         res.status(403).json("This is not a valid user.").end();
         return;
     }
-    let requests = await Users.getRequests(kerberos);
-    if (!(requests)) {
-        res.status(404).json("This user does not have any requests").end();
-        return;
-    }
     if (req.session.name !== kerberos) {
         res.status(403).json("You do not have permission.").end();
+        return;
+    }
+    let requests = await Users.getRequests(kerberos);
+    if (!(requests)) {
+        res.status(200).json("This user does not have any requests.").end();
         return;
     }
     let requestsData = await shapeDataForRequest(requests, req);
@@ -191,7 +191,7 @@ async function shapeDataForRequest(requests) {
  * @throws {401} - if user is not logged in
 */
 router.get('/isSignedIn', async (req, res) => {
-    if (!req.session.name){
+    if (!req.session.name) {
         res.status(401).json("You are not signed in").end();
         return;
     }

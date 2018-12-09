@@ -1,4 +1,13 @@
 const database = require('../database');
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: "ihtfoodmit@gmail.com",
+    pass: 'fixsoftware'
+  }
+})
 
 class Users {
   /**
@@ -110,6 +119,82 @@ class Users {
       } else if (response[0].type == 'guest') {
         return 2
       }
+    }
+  }
+
+  /**
+   * Sends notification for match to users who have been matched
+   * @param {int} firstUserId 
+   * @param {int} secondUserId
+   * @param {string} date
+   * @param {int} diningHallId
+   * @return true if email is successful, false otherwise
+   */
+  static async sendNotificationForMatch(firstUserId, secondUserId, date, diningHallId) {
+    // extracting needed data
+    let hostResponse = await database.query(`select kerberos from user where id = ${firstUserId}`)
+    let hostKerberos = hostResponse[0].kerberos
+    let guestResponse = await database.query(`select kerberos from user where id = ${secondUserId}`)
+    let guestKerberos = guestResponse[0].kerberos
+    let diningHallResponse = await database.query(`select name from dining_hall where id = ${diningHallId}`)
+    let chosenDiningHall = diningHallResponse[0].name
+    let subjectText = "IHTF: You have been matched!"
+    let emailText = "<p>Hey " + hostKerberos + ", <br> <br> You have been matched to dine with " + guestKerberos + " on " +
+      date + " in " + chosenDiningHall + ". <br> Enjoy! <br> <br> I Have This Food Team</p>";
+    // preparing the email
+    let fullData = {
+      from: "ihtfoodmit@gmail.com",
+      to: hostKerberos + "@mit.edu",
+      subject: subjectText,
+      html: emailText
+    }
+    // sending the email
+    transporter.sendMail(fullData, function (error, response) {
+      if (error) {
+        console.log(JSON.stringify(error))
+        return false;
+      } else {
+        return true;
+      };
+    })
+  }
+
+  /**
+   * Sends notification for cancelation of a meal
+   * @param {int} id - meal id
+   * @return {boolean} - true if successful, false otherwise
+   */
+  static async sendNotificationForCancelation(id) {
+    // extracting needed data
+    let response = await database.query(`select host_id, guest_id, time from meal where id = ${id}`);
+    let hostId = response[0].host_id;
+    let hostResponse = await database.query(`select kerberos from user where id = ${hostId}`);
+    let hostKerberos = hostResponse[0].kerberos
+
+    let guestId = response[0].guest_id;
+    let guestResponse = await database.query(`select kerberos from user where id = ${guestId}`);
+    let guestKerberos = guestResponse[0].kerberos
+
+    let kerberoses = [hostKerberos, guestKerberos];
+    for (let i = 0; i < kerberoses.length; i++) {
+      // preparing the email
+      let fullData = {
+        from: "ihtfoodmit@gmail.com",
+        to: kerberoses[i] + "@mit.edu",
+        subject: "IHTF: Meal Cancelation",
+        html: "Dear " + kerberoses[i] + ", <br> <br>Unfortunately your meal scheduled on " + response[0].time.toString() +
+          " has been canceled. <br> Feel free to add another request in order to be matched again! <br> <br>" +
+          "I Have This Food Team"
+      }
+      // sending the email
+      await transporter.sendMail(fullData, async function (error, response) {
+        if (error) {
+          console.log(JSON.stringify(error))
+          return false;
+        } else {
+          return true;
+        };
+      })
     }
   }
 }
