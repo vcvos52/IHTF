@@ -235,7 +235,7 @@ class Requests {
   }
 }
 
-schedule.scheduleJob("10 0 * * *", () => {
+schedule.scheduleJob("30 * * * *", () => {
     Requests.clearStaleRequests();
     console.log("SUPPOSEDLY RAN THE JOB");
 });
