@@ -218,11 +218,13 @@ class Requests {
   */
   static async clearStaleRequests() {
     await database.query(`DELETE FROM \`request\` WHERE \`id\` IN (SELECT \`request_id\` FROM \`interval\` WHERE end_time < '${new Date().toISOString().slice(0, 19).replace('T', ' ')}')`)
+    console.log("CLEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARED STAAAAAAAAAAAAAAAAAAAALE REQUESSSSSSSSSSSSSSSSSSSSTS");
   }
 }
 
 schedule.scheduleJob("10 0 * * *", () => {
     Requests.clearStaleRequests();
+    console.log("SUPPOSEDLY RAN THE JOB");
 });
 
 module.exports = Requests;
