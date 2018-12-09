@@ -7,7 +7,9 @@ const cap = 8;
 class Requests {
   static async addRequest(type, kerberos, locations, date, intervals) {
     // TODO: check if there is outstanding request by same user at same time
-    checkCap(kerberos);
+    if (!Requests.checkCap(kerberos)) {
+      return -1;
+    }
     const userId = await Users.getId(kerberos);
     const insert = `insert into request (user_id, type) values (${userId}, '${type}');`;
     const response = await database.query(insert);
@@ -26,14 +28,16 @@ class Requests {
       await database.query(insertLocation);
     });
     await Requests.match(requestID);
-    return
+    return; 
   }
 
   static async checkCap(kerberos) {
     const userId = await Users.getId(kerberos);
-    const sql_count = `select count(*) from request where user_id=${userId};`;
+    const sql_count = `select count(*) as count from request where user_id=${userId};`;
     const response = await database.query(sql_count);
-    console.log(response);
+    if (response.count > cap) {
+      return -1;
+    }
   }
 
   static async requestExists(kerberos, type) {
