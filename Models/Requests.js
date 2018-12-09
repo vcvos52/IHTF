@@ -221,7 +221,7 @@ class Requests {
   }
 }
 
-schedule.scheduleJob("0 0 0 * * *", () => {
+schedule.scheduleJob("10 0 * * *", () => {
     Requests.clearStaleRequests();
 });
 
