@@ -28,13 +28,14 @@ class Requests {
       await database.query(insertLocation);
     });
     await Requests.match(requestID);
-    return; 
+    return;
   }
 
   static async checkCap(kerberos) {
     const userId = await Users.getId(kerberos);
     const sql_count = `select count(*) as count from request where user_id=${userId};`;
     const response = await database.query(sql_count);
+    console.log("count response: ", response);
     if (response.count > cap) {
       return -1;
     }
