@@ -34,6 +34,9 @@
         />
         <b-button type="submit" class="button">Submit</b-button>
       </b-form>
+      <div v-if="wait" class="success-message">
+        <b>{{wait}}</b>
+      </div>
       <div v-if="success" class="success-message">{{ success }}</div>
       <div v-if="error" class="error-message">
         <b>{{error}}</b>
@@ -60,6 +63,7 @@ export default {
       diningHalls: [],
       hours: [],
       date: null,
+      wait: "",
 
       diningOptions: [
         { value: "baker", text: "Baker" },
@@ -100,6 +104,7 @@ export default {
 
   methods: {
     donateRequest() {
+      this.wait = "Please wait as donation is being made.";
       this.error = "";
       this.success = "";
       const bodyContent = {
@@ -114,8 +119,11 @@ export default {
           eventBus.$emit("update-action", "choice");
           alert(res.data);
           eventBus.$emit("refresh-requests");
+          this.wait = "";
         })
         .catch(err => {
+          // this.error = err.response;
+          this.wait = "";
           this.error = err.response.data;
         });
     }
@@ -129,4 +137,3 @@ export default {
   text-align: center;
 }
 </style>
-
