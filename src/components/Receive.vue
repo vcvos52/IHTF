@@ -77,8 +77,7 @@ export default {
   methods: {
     receiveRequest() {
       if (this.date==null || this.diningHalls.length==0 || this.hours.length==0) {
-        console.log("fields empty");
-        alert("Please fill in all fields!");
+        this.error = "Please fill out all fields!";
       }
       else {
         this.error = "";
