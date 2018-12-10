@@ -5,8 +5,16 @@ const Users = require('./Users');
 const cap = 8;
 
 class Requests {
+
+  /**
+   * Adds a request to the table (request, location, and interval) according to the schema
+   * @param {string} type 
+   * @param {string} kerberos 
+   * @param {list<string>} locations 
+   * @param {string} date 
+   * @param {list<string>} intervals 
+   */
   static async addRequest(type, kerberos, locations, date, intervals) {
-    // TODO: check if there is outstanding request by same user at same time
     const underCap = await Requests.checkCap(kerberos);
     if (!underCap) {
       return false;
@@ -32,6 +40,11 @@ class Requests {
     return true;
   }
 
+  /**
+   * Checks that a user hasn't passed the maximum request cap
+   * @param {string} kerberos 
+   * @return {boolean} true or false depending on the check
+   */
   static async checkCap(kerberos) {
     const userId = await Users.getId(kerberos);
     const sql_count = `select count(*) as count from request where user_id=${userId};`;
@@ -45,6 +58,12 @@ class Requests {
     return true;
   }
 
+  /**
+   * Checks if a request exist in the tables
+   * @param {string} kerberos 
+   * @param {string} type - of request
+   * @return {boolean} true or false
+   */
   static async requestExists(kerberos, type) {
     const id = await Users.getId(kerberos);
     if (id) {
@@ -58,18 +77,34 @@ class Requests {
     return false;
   }
 
+  /**
+   * Gets dining id from name
+   * @param {string} diningName 
+   * @returns {int} dining_hall_id
+   */
   static async getDiningId(diningName) {
     const sql = `select * from dining_hall where name='${diningName}';`;
     const response = await database.query(sql);
     return response[0].id;
   }
 
+  /**
+   * Gets dining name from id
+   * @param {int} diningId 
+   * @return {string} dining hall name
+   */
   static async getDiningName(diningId) {
     const sql = `select * from dining_hall where id='${diningId}';`;
     const response = await database.query(sql);
     return response[0].name;
   }
 
+  /**
+   * Matching algorithm. Takes a request id and checks for a match with other requests
+   * in the table
+   * @param {int} requestId 
+   * @return {boolean} true or false
+   */
   static async match(requestId) {
     const requestQuery = `select * from request where id=${requestId};`;
     const response = await database.query(requestQuery);
@@ -220,6 +255,11 @@ class Requests {
     return false
   }
 
+  /**
+   * Clears the requests from request, interval, and location tables
+   * @param {int} requestId - the request id
+   * @param {int} currentIntervalId - the interval id
+   */
   static async clearRequests(requestId, currentIntervalId) {
     await database.query(`delete from \`request\` where \`id\` =${requestId};`);
     await database.query(`delete from \`request\` where \`id\` =${currentIntervalId};`);
@@ -239,8 +279,9 @@ class Requests {
   }
 }
 
+// scheduling job for cclearing stale requests
 schedule.scheduleJob("0 0 * * *", () => {
-    Requests.clearStaleRequests();
+  Requests.clearStaleRequests();
 });
 
 module.exports = Requests;
