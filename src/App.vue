@@ -1,8 +1,13 @@
 <template>
   <b-container fluid id="app">
     <b-row :no-gutters="true" id="nav" v-if="logged===true">
-      <b-col lg="11">
+      <b-col lg="9">
         <h2 @click="goHome" id="home-button">Welcome to I Have This Food!</h2>
+      </b-col>
+      <b-col lg="2">
+          <h2>
+            Donated: {{donated}}
+          </h2>
       </b-col>
       <b-col lg="1">
         <button class="button" id="signout-button" @click="logout">Log Out</button>
@@ -72,7 +77,8 @@ export default {
       test: true,
       currentAction: "choice",
       logged: false,
-      error: ""
+      error: "",
+      donated: 0
     };
   },
 
@@ -85,10 +91,18 @@ export default {
       axios.post(`/api/requests/setAction/${res}`);
     });
     eventBus.$on("login-action", () => {
+      axios.get(`/api/users/matches/count`).then((res) => {
+        this.donated = res.data;
+      });
       this.logged = true;
     });
     eventBus.$on("logout-action", () => {
       this.logged = false;
+    });
+    eventBus.$on("recount", () => {
+      axios.get(`/api/users/matches/count`).then((res) => {
+        this.donated = res.data;
+      });
     });
 
     /**
@@ -194,7 +208,10 @@ export default {
 }
 
 #home-button:hover {
-  background-color: #ffbb00;
+  background-color: #ffbb00;/**
+ * @param {String} user
+ */
+
   cursor: pointer;
 }
 

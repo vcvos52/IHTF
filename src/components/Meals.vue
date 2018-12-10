@@ -134,6 +134,7 @@ export default {
     this.loadRequests();
     setInterval(() => {
       this.loadMeals();
+      eventBus.$emit("recount");
     }, 3000);
     eventBus.$on("refresh-requests", () => {
       this.loadRequests();

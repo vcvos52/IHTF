@@ -88,6 +88,28 @@ router.get('/matches', async (req, res) => {
 });
 
 /**
+* Get the count of donated meals
+* @name GET/api/users/matches/count
+* @param {String} - users name
+* @returns {int} List of matches for 
+*/
+router.get('/matches/count', async (req, res) => {
+    let kerberos = req.session.name;
+    // if the kerberos does not exist, return that
+    if (!(await Users.userExists(kerberos))) {
+        res.status(403).json("This is not a valid user.").end();
+        return;
+    }
+    let matches = await Users.getDonatedMealCount(kerberos);
+    if (matches[0] !== undefined) {
+        res.status(200).json(matches[0]["COUNT(*)"]).end();
+        return;
+    } else {
+        res.status(404).json("The count did not go through.").end();
+    }
+});
+
+/**
  * Finds pending Requests for a given user
  * @name GET/api/users/requests
  * @param {String} - users name

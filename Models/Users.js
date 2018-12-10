@@ -86,6 +86,38 @@ class Users {
   }
 
   /**
+  * returns meal donation count over the current semester
+  * @param {string} kerberos string to query for meals of
+  * @return {object} count of matches or false if kerberos does not exist in user table
+  */
+  static async getDonatedMealCount(kerberos){
+    // new Date().toISOString().slice(0,19).replace('T', ' ')
+    const id = await Users.getId(kerberos);
+    let current_date = new Date();
+    let this_year_Jan = new Date();
+    this_year_Jan.setMonth(0);
+    let this_year_Aug = new Date();
+    this_year_Aug.setMonth(7);
+    if (current_date >= this_year_Jan && current_date <= this_year_Aug){ // Spring Semester
+        current_date = this_year_Jan;
+    } else {
+        current_date = this_year_Aug;
+    }
+    if (id) {
+        const sql = `SELECT COUNT(*) FROM \`meal\` WHERE host_id IN (SELECT id FROM user WHERE id=${id}) AND time >= '${current_date.toISOString().slice(0,19).replace('T', ' ')}'`;
+        const response = await database.query(sql);
+        if (response[0] !== undefined){
+            return response;
+        } else {
+            return false
+        }
+    } else {
+        return false;
+    }
+    return false;
+  }
+
+  /**
    * returns all requests made by kerberos 'kerberos'
    * @param {string} kerberos string to query for
    * @return {object} entries of requests or false if kerberos does not exist or no requests
