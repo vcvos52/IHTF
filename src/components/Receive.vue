@@ -104,6 +104,7 @@ export default {
 
   methods: {
     receiveRequest() {
+<<<<<<< HEAD
       this.wait = "Please wait as your request is being made.";
       this.error = "";
       this.success = "";
@@ -126,6 +127,32 @@ export default {
           this.wait = "";
           this.error = err.response.data;
         });
+=======
+      if (this.date==null || this.diningHalls.length==0 || this.hours.length==0) {
+        this.error = "Please fill out all fields!";
+      }
+      else {
+        this.error = "";
+        this.success = "";
+        const bodyContent = {
+          diningHalls: this.diningHalls,
+          date: this.date,
+          hours: this.hours
+        };
+        axios
+          .post("/api/requests/receive/", bodyContent)
+          .then(res => {
+            this.success = "Receive request made";
+            eventBus.$emit("update-action", "choice");
+            alert(res.data);
+            eventBus.$emit("refresh-requests");
+          })
+          .catch(err => {
+            // this.error = err.response.data.error;
+            alert(err.response.data.error);
+          });
+        }
+>>>>>>> origin/models
     }
   }
 };
