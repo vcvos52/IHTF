@@ -26,7 +26,7 @@
           :options="hourOptions"
           class="multi-select"
         />
-        <b-button type="submit" class="button">Submit</b-button>
+        <b-button type="submit" class="button"  :disabled="disabled == 1 ? true : false">Submit</b-button>
       </b-form>
       <div v-if="wait" class="success-message">
         <b>{{wait}}</b>
@@ -58,6 +58,7 @@ export default {
       hours: [],
       date: null,
       wait: "",
+      disabled: 0,
 
       diningOptions: [
         { value: "baker", text: "Baker" },
@@ -80,8 +81,10 @@ export default {
 
   methods: {
     receiveRequest() {
+      this.disabled = 1;
       if (this.date==null || this.diningHalls.length==0 || this.hours.length==0) {
         this.error = "Please fill out all fields!";
+        this.disabled = 0;
       }
       else {
         this.error = "";
@@ -104,6 +107,7 @@ export default {
           .catch(err => {
             // this.error = err.response.data.error;
             this.wait = "";
+            this.disabled = 0;
             this.error = err.response.data.error;
           });
         }
