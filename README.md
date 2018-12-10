@@ -8,7 +8,7 @@ IHTF, or I Have This Food, is a web application that allows MIT students with ex
 The proof of concept will contain a simplified version of the app and will allow for logging in and out, creating donating and receiving requests, and a rudimentary matching algorithm.
 
 ### MVP
-The MVP will contain a working version of the app and will allow most features to be present, with the exception of notifications, user 'donated meals' counter, customized hours of operation (per different dining hall), and thorough testing.
+The MVP will contain a working version of the app and will allow most features to be present, with the exception of notifications, aesthetic improvements, some bug fixing, more hours of operation available, clearing of stale requests, and counter for user.
 
 The implementation goals for the MVP, as discussed in the meeting, were:
 1. Delete fulfilled requests: Completed
@@ -28,19 +28,18 @@ Bugs fix:
 OpenID Connect: provides security against CSRF and XSRF because of request parameter 'state' passed into token request. See 2.1.1.1 in https://openid.net/specs/openid-connect-basic-1_0.html
 
 ### Final Product - version 1.0
-The final product contain the finalized version of the app with the following additions:
+The final product contain the finalized version of the app with all features from POC and MVP, and the following additions:
 1. Notification System for matches and deletion of confirmed meals: Completed
-2. Front End change for having different hours of operation given day and dining hall
-3. Counter for donated meals after login
-4. Change of location for logout
-5. Cap on requests
-6. Fix bug on deletion reactiveness of last request and meal: Completed
-7. 'Please Wait' after Submit of a request
-8. Clearing of stale requests (delete from db)
-9. Only showing upcoming meals in front-end (do not delete from db stale ones)
-10. Testing
-11. Put the Foreign Keys back
-12. Make the Pending Request Prettier
+2. Counter for donated meals after login: Completed
+3. Change of location for logout: Completed
+4. Cap on requests: Completed
+5. Fix bug on deletion reactiveness of last request and meal: Completed
+6. 'Please Wait' after Submit of a request: Completed
+7. Clearing of stale requests (delete from db): Completed
+8. Only showing upcoming meals in front-end (do not delete from db stale ones): Completed
+9. Put the Foreign Keys back: Completed
+10. Make the Pending Request Prettier: Completed
+11. Make app aesthetically pleasing for mobile: Completed
 
 ## File ownership
 Models/ -> mostly Husayn, some addition Giulio for nodemailer

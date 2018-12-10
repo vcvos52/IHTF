@@ -264,7 +264,7 @@ input {
   padding-left: 50px;
   padding-right: 50px;
   border-right: 1px solid black;
-  margin-bottom: 70px;
+  margin-bottom: 120px;
 }
 
 #right {

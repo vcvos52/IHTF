@@ -23,7 +23,7 @@
       </b-row>
       <b-row>
         <b-col align="center" id="title">
-          <h3>Pending Requests</h3>
+          <h3 id="pending-requests">Pending Requests</h3>
         </b-col>
       </b-row>
       <b-row v-for="request in requests">
@@ -147,6 +147,11 @@ export default {
 #title {
   padding-bottom: 10px;
   padding-top: 15px;
+}
+
+#pending-requests {
+  border-top: 1px solid black;
+  padding-top: 13px;
 }
 </style>
 

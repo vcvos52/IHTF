@@ -26,8 +26,11 @@
           :options="hourOptions"
           class="multi-select"
         />
-        <b-button type="submit" class="button">Submit</b-button>
+        <b-button type="submit" class="button"  :disabled="disabled == 1 ? true : false">Submit</b-button>
       </b-form>
+      <div v-if="wait" class="success-message">
+        <b>{{wait}}</b>
+      </div>
       <div v-if="success" class="success-message">{{ success }}</div>
       <div v-if="error" class="error-message">
         <b>{{error}}</b>
@@ -54,6 +57,8 @@ export default {
       diningHalls: [],
       hours: [],
       date: null,
+      wait: "",
+      disabled: 0,
 
       diningOptions: [
         { value: "baker", text: "Baker" },
@@ -76,24 +81,36 @@ export default {
 
   methods: {
     receiveRequest() {
-      this.error = "";
-      this.success = "";
-      const bodyContent = {
-        diningHalls: this.diningHalls,
-        date: this.date,
-        hours: this.hours
-      };
-      axios
-        .post("/api/requests/receive/", bodyContent)
-        .then(res => {
-          this.success = "Receive request made";
-          eventBus.$emit("update-action", "choice");
-          alert(res.data);
-          eventBus.$emit("refresh-requests");
-        })
-        .catch(err => {
-          this.error = err.response.data.error;
-        });
+      this.disabled = 1;
+      if (this.date==null || this.diningHalls.length==0 || this.hours.length==0) {
+        this.error = "Please fill out all fields!";
+        this.disabled = 0;
+      }
+      else {
+        this.error = "";
+        this.success = "";
+        this.wait = "Please wait as request is being made.";
+        const bodyContent = {
+          diningHalls: this.diningHalls,
+          date: this.date,
+          hours: this.hours
+        };
+        axios
+          .post("/api/requests/receive/", bodyContent)
+          .then(res => {
+            this.success = "Receive request made";
+            eventBus.$emit("update-action", "choice");
+            alert(res.data);
+            eventBus.$emit("refresh-requests");
+            this.wait = "";
+          })
+          .catch(err => {
+            // this.error = err.response.data.error;
+            this.wait = "";
+            this.disabled = 0;
+            this.error = err.response.data.error;
+          });
+        }
     }
   }
 };
@@ -105,4 +122,3 @@ export default {
   text-align: center;
 }
 </style>
-
