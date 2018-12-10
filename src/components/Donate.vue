@@ -108,9 +108,9 @@ export default {
         this.error = "Please fill out all fields!";
       }
       else {
-        this.wait = "Please wait as donation is being made.";
         this.error = "";
         this.success = "";
+        this.wait = "Please wait as donation is being made.";
         const bodyContent = {
           diningHalls: this.diningHalls,
           date: this.date,
@@ -119,16 +119,17 @@ export default {
         axios
           .post("/api/requests/donate/", bodyContent)
           .then(res => {
+            console.log(this.wait);
             this.success = "Donation request made";
-            eventBus.$emit("update-action", "choice");
             alert(res.data);
+            eventBus.$emit("update-action", "choice");
             eventBus.$emit("refresh-requests");
             this.wait = "";
           })
           .catch(err => {
             // this.error = err.response;
             this.wait = "";
-            this.error = err.response.data;
+            this.error = err.response.data.error;
           });
         }
     }

@@ -42,8 +42,13 @@ router.post('/receive', async (req, res) => {
     let diningHalls = req.body.diningHalls;
     let intervals = req.body.hours;
     let date = req.body.date;
-    await Requests.addRequest("guest", kerberos, diningHalls, date, intervals);
-    res.status(201).json("Receive request added. Check Upcoming Meals to see if you were matched").end();
+    let success = await Requests.addRequest("guest", kerberos, diningHalls, date, intervals);
+    if (!success) {
+        res.status(403).json({error: "You already have 8 unfulfilled requests. Please remove a request or wait to be matched before adding more."}).end();
+      }
+    else {
+        res.status(201).json("Receive request added. Check Upcoming Meals to see if you were matched").end();
+      }
 });
 
 /**
