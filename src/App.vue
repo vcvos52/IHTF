@@ -5,9 +5,7 @@
         <h2 @click="goHome" id="home-button">Welcome to I Have This Food!</h2>
       </b-col>
       <b-col lg="2">
-          <h2>
-            Donated: {{donated}}
-          </h2>
+        <h2>Donated: {{donated}}</h2>
       </b-col>
       <b-col lg="1">
         <button class="button" id="signout-button" @click="logout">Log Out</button>
@@ -74,7 +72,7 @@ export default {
 
   data() {
     return {
-      test: true,
+      test: false,
       currentAction: "choice",
       logged: false,
       error: "",
@@ -91,7 +89,7 @@ export default {
       axios.post(`/api/requests/setAction/${res}`);
     });
     eventBus.$on("login-action", () => {
-      axios.get(`/api/users/matches/count`).then((res) => {
+      axios.get(`/api/users/matches/count`).then(res => {
         this.donated = res.data;
       });
       this.logged = true;
@@ -100,16 +98,16 @@ export default {
       this.logged = false;
     });
     eventBus.$on("recount", () => {
-      axios.get(`/api/users/matches/count`).then((res) => {
+      axios.get(`/api/users/matches/count`).then(res => {
         this.donated = res.data;
       });
     });
 
     /** Counts
-    */
-    axios.get(`/api/users/matches/count`).then((res) => {
-        this.donated = res.data;
-      });
+     */
+    axios.get(`/api/users/matches/count`).then(res => {
+      this.donated = res.data;
+    });
 
     /**
      * Checks if the user is currently signed in
@@ -214,7 +212,7 @@ export default {
 }
 
 #home-button:hover {
-  background-color: #ffbb00;/**
+  background-color: #ffbb00; /**
  * @param {String} user
  */
 
