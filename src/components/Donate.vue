@@ -77,25 +77,31 @@ export default {
 
   methods: {
     donateRequest() {
-      this.error = "";
-      this.success = "";
-      const bodyContent = {
-        diningHalls: this.diningHalls,
-        date: this.date,
-        hours: this.hours
-      };
-      axios
-        .post("/api/requests/donate/", bodyContent)
-        .then(res => {
-          this.success = "Donation request made";
-          eventBus.$emit("update-action", "choice");
-          alert(res.data);
-          eventBus.$emit("refresh-requests");
-        })
-        .catch(err => {
-          // this.error = err.response;
-          alert(err.response.data.error);
-        });
+      if (this.date==null || this.diningHalls.length==0 || this.hours.length==0) {
+        console.log("fields empty");
+        alert("Please fill in all fields!");
+      }
+      else {
+        this.error = "";
+        this.success = "";
+        const bodyContent = {
+          diningHalls: this.diningHalls,
+          date: this.date,
+          hours: this.hours
+        };
+        axios
+          .post("/api/requests/donate/", bodyContent)
+          .then(res => {
+            this.success = "Donation request made";
+            eventBus.$emit("update-action", "choice");
+            alert(res.data);
+            eventBus.$emit("refresh-requests");
+          })
+          .catch(err => {
+            // this.error = err.response;
+            alert(err.response.data.error);
+          });
+        }
     }
   }
 };
