@@ -105,6 +105,12 @@ export default {
       });
     });
 
+    /** Counts
+    */
+    axios.get(`/api/users/matches/count`).then((res) => {
+        this.donated = res.data;
+      });
+
     /**
      * Checks if the user is currently signed in
      * This decided what HTML elements to render
