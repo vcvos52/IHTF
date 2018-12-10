@@ -104,34 +104,11 @@ export default {
 
   methods: {
     donateRequest() {
-<<<<<<< HEAD
-      this.wait = "Please wait as donation is being made.";
-      this.error = "";
-      this.success = "";
-      const bodyContent = {
-        diningHalls: this.diningHalls,
-        date: this.date,
-        hours: this.hours
-      };
-      axios
-        .post("/api/requests/donate/", bodyContent)
-        .then(res => {
-          this.success = "Donation request made";
-          eventBus.$emit("update-action", "choice");
-          alert(res.data);
-          eventBus.$emit("refresh-requests");
-          this.wait = "";
-        })
-        .catch(err => {
-          // this.error = err.response;
-          this.wait = "";
-          this.error = err.response.data;
-        });
-=======
       if (this.date==null || this.diningHalls.length==0 || this.hours.length==0) {
         this.error = "Please fill out all fields!";
       }
       else {
+        this.wait = "Please wait as donation is being made.";
         this.error = "";
         this.success = "";
         const bodyContent = {
@@ -146,13 +123,14 @@ export default {
             eventBus.$emit("update-action", "choice");
             alert(res.data);
             eventBus.$emit("refresh-requests");
+            this.wait = "";
           })
           .catch(err => {
             // this.error = err.response;
-            alert(err.response.data.error);
+            this.wait = "";
+            this.error = err.response.data;
           });
         }
->>>>>>> origin/models
     }
   }
 };
