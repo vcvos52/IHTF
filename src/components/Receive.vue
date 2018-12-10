@@ -92,7 +92,8 @@ export default {
           eventBus.$emit("refresh-requests");
         })
         .catch(err => {
-          this.error = err.response.data.error;
+          // this.error = err.response.data.error;
+          alert(err.response.data.error);
         });
     }
   }
@@ -105,4 +106,3 @@ export default {
   text-align: center;
 }
 </style>
-
